@@ -1,0 +1,47 @@
+name: CI - devel branch with Coastguard integration on latest SDK (aarch64)
+
+# Fork-only: builds an installable aarch64 RPM of the devel branch, which
+# upstream's own workflow only builds for i486 on SFOS 3.3.0.
+
+env:
+  RELEASE: 5.0.0.43
+
+on:
+  push:
+    branches:
+      - devel
+  # Allows to run this workflow manually from the Actions tab.
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: sh
+
+concurrency:
+  group: ci-coastguard-${{ github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    env:
+      SEGMENT_DOWNLOAD_TIMEOUT_MINS: 2
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Prepare
+      run: mkdir RPMS
+
+    - name: Build aarch64 on ${{ env.RELEASE }}
+      uses: coderus/github-sfos-build@master
+      with:
+        release: ${{ env.RELEASE }}
+        arch: aarch64
+
+    - name: Upload build results
+      uses: actions/upload-artifact@v4
+      with:
+        name: RPM-build-results_devel-aarch64-SFOS${{ env.RELEASE }}+
+        path: RPMS/
