@@ -101,6 +101,14 @@ Page {
                 id: packageInfo
             }
 
+            CoastguardInfo {
+                id: coastguardInfo
+                packageName: app.packageName
+                // The build that is installed, or else the one "Install" or "Update" would fetch
+                packageId: _packageStatus === OrnPm.PackageInstalled ? app.installedId : app.availableId
+                fallbackVersion: app.globalVersion
+            }
+
             Item {
                 // Spacer
                 width: parent.width

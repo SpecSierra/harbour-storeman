@@ -17,6 +17,7 @@ Page {
             Storeman.checkForUpdates = checkForUpdatesSwitch.checked
             Storeman.refreshOnSystemUpgrade = resfreshCacheSwitch.checked
             Storeman.searchUnusedRepos = searchUnusedSwitch.checked
+            Storeman.showCoastguard = showCoastguardSwitch.checked
         }
     }
 
@@ -97,6 +98,20 @@ Page {
                 //% "Search for unused repositories after removing packages."
                 description: qsTrId("orn-unused-repos-switch-descr")
                 checked: Storeman.searchUnusedRepos
+            }
+
+            SectionHeader {
+                //% "Security"
+                text: qsTrId("orn-security")
+            }
+
+            TextSwitch {
+                id: showCoastguardSwitch
+                //% "Show Coastguard scan results"
+                text: qsTrId("orn-coastguard-switch")
+                //% "Show on application pages whether the Coastguard malware scan flagged the package. The package name is sent to GitHub, where the results are hosted."
+                description: qsTrId("orn-coastguard-switch-descr")
+                checked: Storeman.showCoastguard
             }
 
             SectionHeader {

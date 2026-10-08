@@ -135,6 +135,8 @@ OTHER_FILES += \
     qml/pages/SharePage.qml \
     qml/pages/IntervalPickerDialog.qml \
     qml/pages/UnusedReposDialog.qml \
+    qml/pages/CoastguardPage.qml \
+    qml/pages/CoastguardWarningDialog.qml \
     qml/components/AppListDelegate.qml \
     qml/components/RatingBox.qml \
     qml/components/IconLabel.qml \
@@ -147,6 +149,8 @@ OTHER_FILES += \
     qml/components/MainPageButton.qml \
     qml/components/MainPageAppGridDelegate.qml \
     qml/components/AppPageMenu.qml \
+    qml/components/CoastguardInfo.qml \
+    qml/components/CoastguardText.qml \
     qml/components/RefreshMenuItem.qml \
     qml/components/ParticipantsDelegate.qml \
     qml/components/CommentDelegate.qml \

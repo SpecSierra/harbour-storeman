@@ -11,6 +11,22 @@ PullDownMenu {
     id: pullMenu
     visible: OrnPm.initialised
 
+    // Runs the action, after a confirmation when Coastguard flagged the
+    // build that is about to be installed as malware
+    function _confirmIfFlagged(action) {
+        if (!coastguardInfo.detected) {
+            action()
+            return
+        }
+        var dialog = pageStack.push(Qt.resolvedUrl("../pages/CoastguardWarningDialog.qml"), {
+                                        appName: app.title,
+                                        version: coastguardInfo.version,
+                                        detections: coastguardInfo.build.summary ?
+                                                        coastguardInfo.build.summary.detections : []
+                                    })
+        dialog.accepted.connect(action)
+    }
+
     MenuItem {
         enabled: !app.running
         //% "Reload"
@@ -84,7 +100,7 @@ PullDownMenu {
         onClicked: {
             switch (_packageStatus) {
             case OrnPm.PackageAvailable:
-                OrnPm.installPackage(app.availableId)
+                _confirmIfFlagged(function() { OrnPm.installPackage(app.availableId) })
                 break
             case OrnPm.PackageInstalled:
             case OrnPm.PackageUpdateAvailable:
@@ -104,7 +120,7 @@ PullDownMenu {
         enabled: _enableMenu
         //% "Update"
         text: qsTrId("orn-update")
-        onClicked: OrnPm.updatePackage(app.packageName)
+        onClicked: _confirmIfFlagged(function() { OrnPm.updatePackage(app.packageName) })
     }
 
     MenuItem {

@@ -1078,5 +1078,173 @@
         <source>Storeman OBS Repository</source>
         <translation>Storeman OBS Repository</translation>
     </message>
+    <message id="orn-coastguard-install-anyway">
+        <source>Install anyway</source>
+        <translation>Install anyway</translation>
+    </message>
+    <message id="orn-coastguard-verdict-detected">
+        <source>Flagged as malware</source>
+        <translation>Flagged as malware</translation>
+    </message>
+    <message id="orn-coastguard-warning">
+        <source>The Coastguard scan flagged %0 %1 as malware. Installing it may harm your device and your data.</source>
+        <translation>The Coastguard scan flagged %0 %1 as malware. Installing it may harm your device and your data.</translation>
+    </message>
+    <message id="orn-coastguard-sandbox-disabled">
+        <source>Runs without the Sailjail sandbox (disabled by the package)</source>
+        <translation>Runs without the Sailjail sandbox (disabled by the package)</translation>
+    </message>
+    <message id="orn-coastguard-sandbox-none">
+        <source>Declares no Sailjail sandbox profile</source>
+        <translation>Declares no Sailjail sandbox profile</translation>
+    </message>
+    <message id="orn-coastguard-own-profile">
+        <source>Ships its own sandbox profile</source>
+        <translation>Ships its own sandbox profile</translation>
+    </message>
+    <message id="orn-coastguard-root-services" numerus="yes">
+        <source>Installs %n background service(s) running as root</source>
+        <translation>
+            <numerusform>Installs %n background service running as root</numerusform>
+            <numerusform>Installs %n background services running as root</numerusform>
+        </translation>
+    </message>
+    <message id="orn-coastguard-privileged-files" numerus="yes">
+        <source>Installs %n file(s) with elevated privileges (setuid or capabilities)</source>
+        <translation>
+            <numerusform>Installs %n file with elevated privileges (setuid or capabilities)</numerusform>
+            <numerusform>Installs %n files with elevated privileges (setuid or capabilities)</numerusform>
+        </translation>
+    </message>
+    <message id="orn-coastguard-system-hook">
+        <source>Hooks into the system: %0</source>
+        <translation>Hooks into the system: %0</translation>
+    </message>
+    <message id="orn-coastguard-indicator">
+        <source>Contains code for: %0</source>
+        <translation>Contains code for: %0</translation>
+    </message>
+    <message id="orn-coastguard-more" numerus="yes">
+        <source>and %n more</source>
+        <translation>
+            <numerusform>and %n more</numerusform>
+            <numerusform>and %n more</numerusform>
+        </translation>
+    </message>
+    <message id="orn-coastguard-files">
+        <source>Files: %0 added, %1 removed, %2 changed</source>
+        <translation>Files: %0 added, %1 removed, %2 changed</translation>
+    </message>
+    <message id="orn-coastguard-reputation-ok">
+        <source>%0: not known as malware</source>
+        <translation>%0: not known as malware</translation>
+    </message>
+    <message id="orn-coastguard-reputation-failed">
+        <source>%0: lookup failed (%1)</source>
+        <translation>%0: lookup failed (%1)</translation>
+    </message>
+    <message id="orn-coastguard-title">
+        <source>Coastguard scan</source>
+        <translation>Coastguard scan</translation>
+    </message>
+    <message id="orn-coastguard-other-version">
+        <source>Version %0 has not been scanned. Below is the scan of version %1.</source>
+        <translation>Version %0 has not been scanned. Below is the scan of version %1.</translation>
+    </message>
+    <message id="orn-coastguard-never-scanned">
+        <source>No version of this package has been scanned.</source>
+        <translation>No version of this package has been scanned.</translation>
+    </message>
+    <message id="orn-coastguard-verdict-clean">
+        <source>No known malware found</source>
+        <translation>No known malware found</translation>
+    </message>
+    <message id="orn-coastguard-scanned">
+        <source>%0 (%1), scanned %2</source>
+        <translation>%0 (%1), scanned %2</translation>
+    </message>
+    <message id="orn-coastguard-detections">
+        <source>Detections</source>
+        <translation>Detections</translation>
+    </message>
+    <message id="orn-coastguard-review">
+        <source>Worth reviewing</source>
+        <translation>Worth reviewing</translation>
+    </message>
+    <message id="orn-coastguard-permissions">
+        <source>Sandbox permissions</source>
+        <translation>Sandbox permissions</translation>
+    </message>
+    <message id="orn-coastguard-none">
+        <source>None</source>
+        <translation>None</translation>
+    </message>
+    <message id="orn-coastguard-changes">
+        <source>Changes since %0</source>
+        <translation>Changes since %0</translation>
+    </message>
+    <message id="orn-coastguard-reputation">
+        <source>Known-malware databases</source>
+        <translation>Known-malware databases</translation>
+    </message>
+    <message id="orn-coastguard-about">
+        <source>About this check</source>
+        <translation>About this check</translation>
+    </message>
+    <message id="orn-coastguard-disclaimer">
+        <source>Coastguard is an independent, automatic scan of packages published on OpenRepos. It looks for known malware signatures and describes what a package sets up on the device. It cannot detect new or targeted malware: a clean result is not a guarantee that the package is safe.</source>
+        <translation>Coastguard is an independent, automatic scan of packages published on OpenRepos. It looks for known malware signatures and describes what a package sets up on the device. It cannot detect new or targeted malware: a clean result is not a guarantee that the package is safe.</translation>
+    </message>
+    <message id="orn-coastguard-full-report">
+        <source>Full report</source>
+        <translation>Full report</translation>
+    </message>
+    <message id="orn-coastguard-checking">
+        <source>Coastguard: checking</source>
+        <translation>Coastguard: checking</translation>
+    </message>
+    <message id="orn-coastguard-clean">
+        <source>Coastguard: no known malware</source>
+        <translation>Coastguard: no known malware</translation>
+    </message>
+    <message id="orn-coastguard-detected">
+        <source>Coastguard: flagged as malware</source>
+        <translation>Coastguard: flagged as malware</translation>
+    </message>
+    <message id="orn-coastguard-unscanned">
+        <source>Coastguard: this version is not scanned</source>
+        <translation>Coastguard: this version is not scanned</translation>
+    </message>
+    <message id="orn-coastguard-unknown">
+        <source>Coastguard: not scanned</source>
+        <translation>Coastguard: not scanned</translation>
+    </message>
+    <message id="orn-coastguard-error">
+        <source>Coastguard: result not available</source>
+        <translation>Coastguard: result not available</translation>
+    </message>
+    <message id="orn-coastguard-review-count" numerus="yes">
+        <source>%n thing(s) worth reviewing</source>
+        <translation>
+            <numerusform>%n thing worth reviewing</numerusform>
+            <numerusform>%n things worth reviewing</numerusform>
+        </translation>
+    </message>
+    <message id="orn-coastguard-last-scanned">
+        <source>Last scanned version: %0</source>
+        <translation>Last scanned version: %0</translation>
+    </message>
+    <message id="orn-security">
+        <source>Security</source>
+        <translation>Security</translation>
+    </message>
+    <message id="orn-coastguard-switch">
+        <source>Show Coastguard scan results</source>
+        <translation>Show Coastguard scan results</translation>
+    </message>
+    <message id="orn-coastguard-switch-descr">
+        <source>Show on application pages whether the Coastguard malware scan flagged the package. The package name is sent to GitHub, where the results are hosted.</source>
+        <translation>Show on application pages whether the Coastguard malware scan flagged the package. The package name is sent to GitHub, where the results are hosted.</translation>
+    </message>
 </context>
 </TS>

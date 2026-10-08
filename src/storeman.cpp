@@ -35,6 +35,7 @@ static const QString UPDATES_SHOW_NOTIFICATION{QStringLiteral("updates/show_noti
 static const QString UPDATES_LAST_CHECK       {QStringLiteral("updates/last_check")};
 static const QString REFRESH_CACHE_ENABLE     {QStringLiteral("refresh_cache/enable")};
 static const QString REPOS_SEARCH_UNUSED      {QStringLiteral("repos/search_unused")};
+static const QString COASTGUARD_SHOW          {QStringLiteral("coastguard/show")};
 static const QString GROUP_HINTS              {QStringLiteral("hints")};
 
 
@@ -217,6 +218,22 @@ void Storeman::setSearchUnusedRepos(bool value)
 
     d_func()->settings.setValue(REPOS_SEARCH_UNUSED, value);
     emit this->searchUnusedReposChanged();
+}
+
+bool Storeman::showCoastguard() const
+{
+    return d_func()->settings.value(COASTGUARD_SHOW, true).toBool();
+}
+
+void Storeman::setShowCoastguard(bool value)
+{
+    if (this->showCoastguard() == value)
+    {
+        return;
+    }
+
+    d_func()->settings.setValue(COASTGUARD_SHOW, value);
+    emit this->showCoastguardChanged();
 }
 
 bool Storeman::fileExists(const QString &filePath)
