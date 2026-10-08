@@ -215,10 +215,11 @@ Page {
 
             Button {
                 anchors.horizontalCenter: parent.horizontalCenter
-                visible: !!_summary && !!_summary.run
+                // The report page opens without a GitHub account
+                visible: !!_summary && !!_summary.report
                 //% "Full report"
                 text: qsTrId("orn-coastguard-full-report")
-                onClicked: Qt.openUrlExternally(_summary.run)
+                onClicked: Qt.openUrlExternally(_summary.report)
             }
         }
 

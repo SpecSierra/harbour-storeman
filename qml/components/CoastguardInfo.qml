@@ -226,7 +226,8 @@ BackgroundItem {
         Label {
             width: parent.width
             visible: text
-            truncationMode: TruncationMode.Fade
+            wrapMode: Text.WordWrap
+            maximumLineCount: 2
             textFormat: Text.PlainText
             font.pixelSize: Theme.fontSizeExtraSmall
             color: coastguard.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
@@ -236,8 +237,12 @@ BackgroundItem {
                     return coastguard.reviewReasons[0]
                 }
                 if (coastguard.scanState === "unscanned" && coastguard.latestBuild) {
-                    //% "Last scanned version: %0"
-                    return qsTrId("orn-coastguard-last-scanned").arg(coastguard.latestBuild.version)
+                    // Both versions, so a mismatch explains itself
+                    //: %0 is the version of this app, %1 the last version that was scanned
+                    //% "%0 is not scanned, the last scan is of %1"
+                    return qsTrId("orn-coastguard-last-scanned")
+                            .arg(coastguard.version + (coastguard.arch ? " " + coastguard.arch : ""))
+                            .arg(coastguard.latestBuild.version + " " + coastguard.latestBuild.arch)
                 }
                 return ""
             }

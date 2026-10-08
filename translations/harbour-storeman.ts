@@ -1118,8 +1118,9 @@
         <translation>Coastguard: result not available</translation>
     </message>
     <message id="orn-coastguard-last-scanned">
-        <source>Last scanned version: %0</source>
-        <translation>Last scanned version: %0</translation>
+        <source>%0 is not scanned, the last scan is of %1</source>
+        <extracomment>%0 is the version of this app, %1 the last version that was scanned</extracomment>
+        <translation>%0 is not scanned, the last scan is of %1</translation>
     </message>
     <message id="orn-coastguard-more" numerus="yes">
         <source>and %n more</source>
