@@ -17,43 +17,9 @@ Page {
     readonly property var _shown: build ? build : latestBuild
     readonly property var _summary: _shown && _shown.summary ? _shown.summary : null
     readonly property bool _detected: !!_shown && _shown.verdict === "detected"
+    // { grade, reasons: [{ level, text }] }; null for scans stored before grades existed
+    readonly property var _risk: _summary && _summary.risk ? _summary.risk : null
     readonly property color _errorColor: Theme.errorColor ? Theme.errorColor : "#ff4d4d"
-
-    function _reviewLines(s) {
-        var lines = []
-        if (!s) {
-            return lines
-        }
-        if (s.sandbox === "disabled") {
-            //% "Runs without the Sailjail sandbox (disabled by the package)"
-            lines.push(qsTrId("orn-coastguard-sandbox-disabled"))
-        } else if (s.sandbox === "none") {
-            //% "Declares no Sailjail sandbox profile"
-            lines.push(qsTrId("orn-coastguard-sandbox-none"))
-        }
-        if (s.own_sandbox_profile) {
-            //% "Ships its own sandbox profile"
-            lines.push(qsTrId("orn-coastguard-own-profile"))
-        }
-        if (s.root_services > 0) {
-            //% "Installs %n background service(s) running as root"
-            lines.push(qsTrId("orn-coastguard-root-services", s.root_services))
-        }
-        if (s.privileged_files > 0) {
-            //% "Installs %n file(s) with elevated privileges (setuid or capabilities)"
-            lines.push(qsTrId("orn-coastguard-privileged-files", s.privileged_files))
-        }
-        for (var i = 0; i < s.system_hooks.length; ++i) {
-            //% "Hooks into the system: %0"
-            lines.push(qsTrId("orn-coastguard-system-hook").arg(s.system_hooks[i]))
-        }
-        for (i = 0; i < s.indicators.length; ++i) {
-            //: %0 is a capability found in the package, in English, e.g. "Reads Contacts Database"
-            //% "Contains code for: %0"
-            lines.push(qsTrId("orn-coastguard-indicator").arg(s.indicators[i]))
-        }
-        return lines
-    }
 
     function _changeLines(s) {
         var lines = []
@@ -122,11 +88,26 @@ Page {
                 visible: !!_shown
                 font.pixelSize: Theme.fontSizeLarge
                 color: _detected ? _errorColor : Theme.highlightColor
-                text: _detected ?
-                          //% "Flagged as malware"
-                          qsTrId("orn-coastguard-verdict-detected") :
-                          //% "No known malware found"
-                          qsTrId("orn-coastguard-verdict-clean")
+                text: {
+                    if (_detected) {
+                        //% "Known malware"
+                        return qsTrId("orn-coastguard-headline-malware")
+                    }
+                    switch (_risk ? _risk.grade : "") {
+                    case "high":
+                        //% "High risk"
+                        return qsTrId("orn-coastguard-headline-high")
+                    case "medium":
+                        //% "Worth a look"
+                        return qsTrId("orn-coastguard-headline-medium")
+                    case "low":
+                        //% "Nothing unusual"
+                        return qsTrId("orn-coastguard-headline-low")
+                    default:
+                        //% "Scanned"
+                        return qsTrId("orn-coastguard-headline-nograde")
+                    }
+                }
             }
 
             CoastguardText {
@@ -141,31 +122,26 @@ Page {
                                .arg(new Date(_shown.last_scanned).toLocaleDateString(_locale, Locale.ShortFormat)) : ""
             }
 
+            CoastguardText {
+                visible: !!_risk && _risk.grade === "low"
+                //% "Nothing in what this package declares or installs stands out."
+                text: qsTrId("orn-coastguard-low-explained")
+            }
+
             SectionHeader {
-                visible: detections.count
-                //% "Detections"
-                text: qsTrId("orn-coastguard-detections")
+                visible: reasons.count
+                //% "What it gets to do"
+                text: qsTrId("orn-coastguard-reasons")
             }
 
             Repeater {
-                id: detections
-                model: _summary ? _summary.detections : []
+                id: reasons
+                model: _risk ? _risk.reasons : []
                 CoastguardText {
-                    color: _errorColor
-                    text: modelData
+                    // Informational reasons do not count towards the grade
+                    color: modelData.level === "info" ? Theme.secondaryColor : Theme.primaryColor
+                    text: "• " + modelData.text
                 }
-            }
-
-            SectionHeader {
-                visible: review.count
-                //% "Worth reviewing"
-                text: qsTrId("orn-coastguard-review")
-            }
-
-            Repeater {
-                id: review
-                model: _reviewLines(_summary)
-                CoastguardText { text: "• " + modelData }
             }
 
             SectionHeader {
@@ -196,19 +172,31 @@ Page {
             }
 
             SectionHeader {
-                visible: virustotal.visible || malwarebazaar.visible
-                //% "Known-malware databases"
-                text: qsTrId("orn-coastguard-reputation")
+                visible: !!_shown
+                //% "Known-malware check"
+                text: qsTrId("orn-coastguard-malware-check")
             }
 
             CoastguardText {
-                id: virustotal
+                visible: !!_shown && !_detected
+                //% "Nothing recognised by the ClamAV and YARA signatures."
+                text: qsTrId("orn-coastguard-malware-none")
+            }
+
+            Repeater {
+                model: _summary ? _summary.detections : []
+                CoastguardText {
+                    color: _errorColor
+                    text: "• " + modelData
+                }
+            }
+
+            CoastguardText {
                 visible: text
                 text: _summary ? _reputationLine("VirusTotal", _summary.reputation.virustotal) : ""
             }
 
             CoastguardText {
-                id: malwarebazaar
                 visible: text
                 text: _summary ? _reputationLine("MalwareBazaar", _summary.reputation.malwarebazaar) : ""
             }
@@ -221,7 +209,7 @@ Page {
             CoastguardText {
                 color: Theme.secondaryColor
                 font.pixelSize: Theme.fontSizeExtraSmall
-                //% "Coastguard is an independent, automatic scan of packages published on OpenRepos. It looks for known malware signatures and describes what a package sets up on the device. It cannot detect new or targeted malware: a clean result is not a guarantee that the package is safe."
+                //% "Coastguard is an independent, automatic scan of packages published on OpenRepos. It describes what a package gets to do on the device and checks it against known malware. It cannot recognise new malware, and it cannot tell whether an app misuses the access it has: nothing here is a guarantee that the package is safe."
                 text: qsTrId("orn-coastguard-disclaimer")
             }
 

@@ -5,6 +5,10 @@ import harbour.orn 1.0
 // Shows what the Coastguard scanner (https://github.com/SpecSierra/Coastguard)
 // found in the package of this app, for the version that is installed or
 // would be installed. Only the package name is sent, in the request URL.
+//
+// The row leads with the risk grade: how much the package gets to do on the
+// device. A scan cannot prove an app safe, so there is deliberately no
+// "all good" tick; known malware is the one case shown as an alarm.
 BackgroundItem {
     id: coastguard
 
@@ -32,8 +36,24 @@ BackgroundItem {
     // The most recently built one that was scanned, for "last scanned" hints
     readonly property var latestBuild: builds.length ? builds[builds.length - 1] : null
     readonly property bool detected: scanState === "detected"
-    // Number of things a careful user may want to read before installing
-    readonly property int reviewCount: build ? _reviewCount(build.summary) : 0
+    // { grade: "low"|"medium"|"high", reasons: [{ level, text }] }, or null
+    // for a scan stored before grades existed
+    readonly property var risk: build && build.summary && build.summary.risk ?
+                                    build.summary.risk : null
+    readonly property string grade: risk ? risk.grade : ""
+    // Reasons a careful user may want to read before installing
+    readonly property var reviewReasons: {
+        var list = []
+        if (risk) {
+            for (var i = 0; i < risk.reasons.length; ++i) {
+                if (risk.reasons[i].level !== "info") {
+                    list.push(risk.reasons[i].text)
+                }
+            }
+        }
+        return list
+    }
+    readonly property bool warnBeforeInstall: detected || grade === "high"
 
     readonly property string _baseUrl:
         "https://raw.githubusercontent.com/SpecSierra/Coastguard/results/packages/"
@@ -50,24 +70,6 @@ BackgroundItem {
             }
         }
         return found
-    }
-
-    function _reviewCount(summary) {
-        if (!summary) {
-            return 0
-        }
-        var n = summary.indicators.length + summary.root_services +
-                summary.privileged_files + summary.system_hooks.length
-        if (summary.sandbox === "disabled" || summary.sandbox === "none") {
-            ++n
-        }
-        if (summary.own_sandbox_profile) {
-            ++n
-        }
-        if (summary.changes) {
-            n += summary.changes.attention_count
-        }
-        return n
     }
 
     function _updateState() {
@@ -154,18 +156,10 @@ BackgroundItem {
             verticalCenter: parent.verticalCenter
         }
         visible: !busy.running
-        source: {
-            var color = coastguard.detected ? coastguard._errorColor :
-                        coastguard.highlighted ? Theme.highlightColor : Theme.primaryColor
-            switch (coastguard.scanState) {
-            case "clean":
-                return "image://theme/icon-s-secure?" + color
-            case "detected":
-                return "image://theme/icon-s-high-importance?" + color
-            default:
-                return ""
-            }
-        }
+        source: coastguard.warnBeforeInstall ?
+                    "image://theme/icon-s-high-importance?" +
+                    (coastguard.detected ? coastguard._errorColor :
+                     coastguard.highlighted ? Theme.highlightColor : Theme.primaryColor) : ""
     }
 
     BusyIndicator {
@@ -179,7 +173,9 @@ BackgroundItem {
         id: labels
         anchors {
             left: parent.left
-            leftMargin: Theme.horizontalPageMargin + Theme.iconSizeSmall + Theme.paddingMedium
+            leftMargin: Theme.horizontalPageMargin +
+                        (coastguard.warnBeforeInstall || busy.running ?
+                             Theme.iconSizeSmall + Theme.paddingMedium : 0)
             right: arrow.left
             rightMargin: Theme.paddingMedium
             verticalCenter: parent.verticalCenter
@@ -196,12 +192,24 @@ BackgroundItem {
                 case "loading":
                     //% "Coastguard: checking"
                     return qsTrId("orn-coastguard-checking")
-                case "clean":
-                    //% "Coastguard: no known malware"
-                    return qsTrId("orn-coastguard-clean")
                 case "detected":
-                    //% "Coastguard: flagged as malware"
+                    //% "Coastguard: known malware"
                     return qsTrId("orn-coastguard-detected")
+                case "clean":
+                    switch (coastguard.grade) {
+                    case "high":
+                        //% "Coastguard: high risk"
+                        return qsTrId("orn-coastguard-grade-high")
+                    case "medium":
+                        //% "Coastguard: %n thing(s) to review"
+                        return qsTrId("orn-coastguard-grade-medium", coastguard.reviewReasons.length)
+                    case "low":
+                        //% "Coastguard: nothing unusual"
+                        return qsTrId("orn-coastguard-grade-low")
+                    default:
+                        //% "Coastguard: scanned"
+                        return qsTrId("orn-coastguard-scanned-nograde")
+                    }
                 case "unscanned":
                     //% "Coastguard: this version is not scanned"
                     return qsTrId("orn-coastguard-unscanned")
@@ -219,12 +227,13 @@ BackgroundItem {
             width: parent.width
             visible: text
             truncationMode: TruncationMode.Fade
+            textFormat: Text.PlainText
             font.pixelSize: Theme.fontSizeExtraSmall
             color: coastguard.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
             text: {
-                if (coastguard.scanState === "clean" && coastguard.reviewCount > 0) {
-                    //% "%n thing(s) worth reviewing"
-                    return qsTrId("orn-coastguard-review-count", coastguard.reviewCount)
+                if (coastguard.scanState === "clean" && coastguard.reviewReasons.length) {
+                    // The most serious reason, as written by the scanner (in English)
+                    return coastguard.reviewReasons[0]
                 }
                 if (coastguard.scanState === "unscanned" && coastguard.latestBuild) {
                     //% "Last scanned version: %0"

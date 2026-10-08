@@ -11,18 +11,20 @@ PullDownMenu {
     id: pullMenu
     visible: OrnPm.initialised
 
-    // Runs the action, after a confirmation when Coastguard flagged the
-    // build that is about to be installed as malware
+    // Runs the action, after a confirmation when Coastguard recognised the
+    // build that is about to be installed as malware or graded it high risk
     function _confirmIfFlagged(action) {
-        if (!coastguardInfo.detected) {
+        if (!coastguardInfo.warnBeforeInstall) {
             action()
             return
         }
+        var summary = coastguardInfo.build.summary
         var dialog = pageStack.push(Qt.resolvedUrl("../pages/CoastguardWarningDialog.qml"), {
                                         appName: app.title,
                                         version: coastguardInfo.version,
-                                        detections: coastguardInfo.build.summary ?
-                                                        coastguardInfo.build.summary.detections : []
+                                        malware: coastguardInfo.detected,
+                                        reasons: coastguardInfo.detected && summary ?
+                                                     summary.detections : coastguardInfo.reviewReasons
                                     })
         dialog.accepted.connect(action)
     }
