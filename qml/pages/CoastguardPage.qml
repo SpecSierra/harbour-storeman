@@ -21,23 +21,34 @@ Page {
     readonly property var _risk: _summary && _summary.risk ? _summary.risk : null
     readonly property color _errorColor: Theme.errorColor ? Theme.errorColor : "#ff4d4d"
 
+    // Reasons that count towards the grade; informational ones are left
+    // to the full report
+    function _reasons(risk) {
+        var list = []
+        if (risk) {
+            for (var i = 0; i < risk.reasons.length; ++i) {
+                if (risk.reasons[i].level !== "info") {
+                    list.push(risk.reasons[i].text)
+                }
+            }
+        }
+        return list
+    }
+
+    // The changes worth reviewing, a handful at most
     function _changeLines(s) {
         var lines = []
         if (!s || !s.changes) {
             return lines
         }
         var items = s.changes.attention
-        for (var i = 0; i < items.length; ++i) {
+        var shown = Math.min(items.length, 5)
+        for (var i = 0; i < shown; ++i) {
             lines.push(items[i].area + " " + items[i].change + ": " + items[i].item)
         }
-        if (s.changes.attention_count > items.length) {
+        if (s.changes.attention_count > shown) {
             //% "and %n more"
-            lines.push(qsTrId("orn-coastguard-more", s.changes.attention_count - items.length))
-        }
-        var f = s.changes.files
-        if (f) {
-            //% "Files: %0 added, %1 removed, %2 changed"
-            lines.push(qsTrId("orn-coastguard-files").arg(f.added).arg(f.removed).arg(f.changed))
+            lines.push(qsTrId("orn-coastguard-more", s.changes.attention_count - shown))
         }
         return lines
     }
@@ -146,12 +157,6 @@ Page {
                                .arg(new Date(_shown.last_scanned).toLocaleDateString(_locale, Locale.ShortFormat)) : ""
             }
 
-            CoastguardText {
-                visible: !!_risk && _risk.grade === "low"
-                //% "Nothing in what this package declares or installs stands out."
-                text: qsTrId("orn-coastguard-low-explained")
-            }
-
             SectionHeader {
                 visible: reasons.count
                 //% "What it gets to do"
@@ -160,12 +165,8 @@ Page {
 
             Repeater {
                 id: reasons
-                model: _risk ? _risk.reasons : []
-                CoastguardText {
-                    // Informational reasons do not count towards the grade
-                    color: modelData.level === "info" ? Theme.secondaryColor : Theme.primaryColor
-                    text: "• " + modelData.text
-                }
+                model: _reasons(_risk)
+                CoastguardText { text: "• " + modelData }
             }
 
             SectionHeader {
@@ -218,15 +219,10 @@ Page {
                 }
             }
 
-            SectionHeader {
-                //% "About this check"
-                text: qsTrId("orn-coastguard-about")
-            }
-
             CoastguardText {
                 color: Theme.secondaryColor
                 font.pixelSize: Theme.fontSizeExtraSmall
-                //% "Coastguard is an independent, automatic scan of packages published on OpenRepos. It describes what a package gets to do on the device and checks it against known malware. It cannot recognise new malware, and it cannot tell whether an app misuses the access it has: nothing here is a guarantee that the package is safe."
+                //% "Automatic scan. It cannot recognise new malware and is no guarantee of safety."
                 text: qsTrId("orn-coastguard-disclaimer")
             }
 

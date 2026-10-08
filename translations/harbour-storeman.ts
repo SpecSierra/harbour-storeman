@@ -1129,10 +1129,6 @@
             <numerusform>and %n more</numerusform>
         </translation>
     </message>
-    <message id="orn-coastguard-files">
-        <source>Files: %0 added, %1 removed, %2 changed</source>
-        <translation>Files: %0 added, %1 removed, %2 changed</translation>
-    </message>
     <message id="orn-coastguard-title">
         <source>Coastguard scan</source>
         <translation>Coastguard scan</translation>
@@ -1169,10 +1165,6 @@
         <source>%0 (%1), scanned %2</source>
         <translation>%0 (%1), scanned %2</translation>
     </message>
-    <message id="orn-coastguard-low-explained">
-        <source>Nothing in what this package declares or installs stands out.</source>
-        <translation>Nothing in what this package declares or installs stands out.</translation>
-    </message>
     <message id="orn-coastguard-reasons">
         <source>What it gets to do</source>
         <translation>What it gets to do</translation>
@@ -1189,13 +1181,9 @@
         <source>Known-malware check</source>
         <translation>Known-malware check</translation>
     </message>
-    <message id="orn-coastguard-about">
-        <source>About this check</source>
-        <translation>About this check</translation>
-    </message>
     <message id="orn-coastguard-disclaimer">
-        <source>Coastguard is an independent, automatic scan of packages published on OpenRepos. It describes what a package gets to do on the device and checks it against known malware. It cannot recognise new malware, and it cannot tell whether an app misuses the access it has: nothing here is a guarantee that the package is safe.</source>
-        <translation>Coastguard is an independent, automatic scan of packages published on OpenRepos. It describes what a package gets to do on the device and checks it against known malware. It cannot recognise new malware, and it cannot tell whether an app misuses the access it has: nothing here is a guarantee that the package is safe.</translation>
+        <source>Automatic scan. It cannot recognise new malware and is no guarantee of safety.</source>
+        <translation>Automatic scan. It cannot recognise new malware and is no guarantee of safety.</translation>
     </message>
     <message id="orn-coastguard-full-report">
         <source>Full report</source>
