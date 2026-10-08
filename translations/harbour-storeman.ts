@@ -1133,14 +1133,6 @@
         <source>Files: %0 added, %1 removed, %2 changed</source>
         <translation>Files: %0 added, %1 removed, %2 changed</translation>
     </message>
-    <message id="orn-coastguard-reputation-ok">
-        <source>%0: not known as malware</source>
-        <translation>%0: not known as malware</translation>
-    </message>
-    <message id="orn-coastguard-reputation-failed">
-        <source>%0: lookup failed (%1)</source>
-        <translation>%0: lookup failed (%1)</translation>
-    </message>
     <message id="orn-coastguard-title">
         <source>Coastguard scan</source>
         <translation>Coastguard scan</translation>
@@ -1197,10 +1189,6 @@
         <source>Known-malware check</source>
         <translation>Known-malware check</translation>
     </message>
-    <message id="orn-coastguard-malware-none">
-        <source>Nothing recognised by the ClamAV and YARA signatures.</source>
-        <translation>Nothing recognised by the ClamAV and YARA signatures.</translation>
-    </message>
     <message id="orn-coastguard-about">
         <source>About this check</source>
         <translation>About this check</translation>
@@ -1246,6 +1234,26 @@
         <source>Latest scanned version: %0</source>
         <extracomment>%0 is a version and architecture</extracomment>
         <translation>Latest scanned version: %0</translation>
+    </message>
+    <message id="orn-coastguard-check-pass">
+        <source>Pass</source>
+        <extracomment>Result of one malware check</extracomment>
+        <translation>Pass</translation>
+    </message>
+    <message id="orn-coastguard-check-fail">
+        <source>Fail</source>
+        <extracomment>Result of one malware check</extracomment>
+        <translation>Fail</translation>
+    </message>
+    <message id="orn-coastguard-check-notrun">
+        <source>Not run</source>
+        <extracomment>Result of one malware check</extracomment>
+        <translation>Not run</translation>
+    </message>
+    <message id="orn-coastguard-check-error">
+        <source>Error</source>
+        <extracomment>Result of one malware check</extracomment>
+        <translation>Error</translation>
     </message>
 </context>
 </TS>

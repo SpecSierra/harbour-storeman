@@ -42,15 +42,39 @@ Page {
         return lines
     }
 
-    function _reputationLine(name, status) {
-        if (!status || status === "not configured") {
-            return ""
+    // The four known-malware checks as [{ name, status }]
+    function _checks(s) {
+        var list = []
+        if (!s || !s.checks) {
+            return list
         }
-        return status === "ok" ?
-                    //% "%0: not known as malware"
-                    qsTrId("orn-coastguard-reputation-ok").arg(name) :
-                    //% "%0: lookup failed (%1)"
-                    qsTrId("orn-coastguard-reputation-failed").arg(name).arg(status)
+        var names = [["clamav", "ClamAV"], ["yara", "YARA"],
+                     ["virustotal", "VirusTotal"], ["malwarebazaar", "MalwareBazaar"]]
+        for (var i = 0; i < names.length; ++i) {
+            list.push({ name: names[i][1], status: s.checks[names[i][0]] })
+        }
+        return list
+    }
+
+    function _checkStatus(status) {
+        switch (status) {
+        case "pass":
+            //: Result of one malware check
+            //% "Pass"
+            return qsTrId("orn-coastguard-check-pass")
+        case "fail":
+            //: Result of one malware check
+            //% "Fail"
+            return qsTrId("orn-coastguard-check-fail")
+        case "not run":
+            //: Result of one malware check
+            //% "Not run"
+            return qsTrId("orn-coastguard-check-notrun")
+        default:
+            //: Result of one malware check
+            //% "Error"
+            return qsTrId("orn-coastguard-check-error")
+        }
     }
 
     allowedOrientations: defaultAllowedOrientations
@@ -177,28 +201,21 @@ Page {
                 text: qsTrId("orn-coastguard-malware-check")
             }
 
-            CoastguardText {
-                visible: !!_shown && !_detected
-                //% "Nothing recognised by the ClamAV and YARA signatures."
-                text: qsTrId("orn-coastguard-malware-none")
+            Repeater {
+                model: _checks(_summary)
+                CoastguardText {
+                    color: modelData.status === "fail" ? _errorColor : Theme.primaryColor
+                    text: modelData.name + ": " + _checkStatus(modelData.status)
+                }
             }
 
             Repeater {
                 model: _summary ? _summary.detections : []
                 CoastguardText {
                     color: _errorColor
+                    font.pixelSize: Theme.fontSizeExtraSmall
                     text: "• " + modelData
                 }
-            }
-
-            CoastguardText {
-                visible: text
-                text: _summary ? _reputationLine("VirusTotal", _summary.reputation.virustotal) : ""
-            }
-
-            CoastguardText {
-                visible: text
-                text: _summary ? _reputationLine("MalwareBazaar", _summary.reputation.malwarebazaar) : ""
             }
 
             SectionHeader {
