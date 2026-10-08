@@ -1242,5 +1242,10 @@
         <extracomment>%0 is the package file name of the previous version</extracomment>
         <translation>Changes since %0</translation>
     </message>
+    <message id="orn-coastguard-latest-scanned">
+        <source>Latest scanned version: %0</source>
+        <extracomment>%0 is a version and architecture</extracomment>
+        <translation>Latest scanned version: %0</translation>
+    </message>
 </context>
 </TS>

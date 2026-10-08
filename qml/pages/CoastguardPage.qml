@@ -72,7 +72,7 @@ Page {
             }
 
             CoastguardText {
-                visible: !build && !!_shown
+                visible: !build && !!_shown && version !== ""
                 color: Theme.highlightColor
                 //% "Version %0 has not been scanned. Below is the scan of version %1."
                 text: _shown ? qsTrId("orn-coastguard-other-version").arg(version).arg(_shown.version) : ""

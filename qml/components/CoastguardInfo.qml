@@ -31,10 +31,13 @@ BackgroundItem {
     property string scanState: ""
     // Every scanned build of the package, oldest first
     property var builds: []
-    // The build matching version and arch, or null
-    readonly property var build: _pick(builds, version, arch)
-    // The most recently built one that was scanned, for "last scanned" hints
+    // The most recently built one that was scanned
     readonly property var latestBuild: builds.length ? builds[builds.length - 1] : null
+    // Storeman only knows the version once the author's repository is enabled
+    readonly property bool versionKnown: version !== ""
+    // The build matching version and arch, or null. Without a known version
+    // this is the latest scanned build, and the row says which one that is.
+    readonly property var build: versionKnown ? _pick(builds, version, arch) : latestBuild
     readonly property bool detected: scanState === "detected"
     // { grade: "low"|"medium"|"high", reasons: [{ level, text }] }, or null
     // for a scan stored before grades existed
@@ -155,11 +158,15 @@ BackgroundItem {
             leftMargin: Theme.horizontalPageMargin
             verticalCenter: parent.verticalCenter
         }
-        visible: !busy.running
-        source: coastguard.warnBeforeInstall ?
-                    "image://theme/icon-s-high-importance?" +
-                    (coastguard.detected ? coastguard._errorColor :
-                     coastguard.highlighted ? Theme.highlightColor : Theme.primaryColor) : ""
+        width: Theme.iconSizeSmallPlus ? Theme.iconSizeSmallPlus : Theme.iconSizeSmall * 1.5
+        height: width
+        sourceSize.width: width
+        sourceSize.height: height
+        opacity: busy.running ? Theme.opacityLow : 1.0
+        // The coastguard on watch
+        source: "image://theme/icon-m-person?" +
+                (coastguard.detected ? coastguard._errorColor :
+                 coastguard.highlighted ? Theme.highlightColor : Theme.primaryColor)
     }
 
     BusyIndicator {
@@ -172,10 +179,8 @@ BackgroundItem {
     Column {
         id: labels
         anchors {
-            left: parent.left
-            leftMargin: Theme.horizontalPageMargin +
-                        (coastguard.warnBeforeInstall || busy.running ?
-                             Theme.iconSizeSmall + Theme.paddingMedium : 0)
+            left: icon.right
+            leftMargin: Theme.paddingMedium
             right: arrow.left
             rightMargin: Theme.paddingMedium
             verticalCenter: parent.verticalCenter
@@ -232,6 +237,13 @@ BackgroundItem {
             font.pixelSize: Theme.fontSizeExtraSmall
             color: coastguard.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
             text: {
+                if (coastguard.build && !coastguard.versionKnown) {
+                    // Be clear about which build the line above is about
+                    //: %0 is a version and architecture
+                    //% "Latest scanned version: %0"
+                    return qsTrId("orn-coastguard-latest-scanned")
+                            .arg(coastguard.build.version + " " + coastguard.build.arch)
+                }
                 if (coastguard.scanState === "clean" && coastguard.reviewReasons.length) {
                     // The most serious reason, as written by the scanner (in English)
                     return coastguard.reviewReasons[0]
