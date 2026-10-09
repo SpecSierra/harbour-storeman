@@ -1177,13 +1177,9 @@
         <source>None</source>
         <translation>None</translation>
     </message>
-    <message id="orn-coastguard-malware-check">
-        <source>Known-malware check</source>
-        <translation>Known-malware check</translation>
-    </message>
     <message id="orn-coastguard-disclaimer">
-        <source>Automatic scan. It cannot recognise new malware and is no guarantee of safety.</source>
-        <translation>Automatic scan. It cannot recognise new malware and is no guarantee of safety.</translation>
+        <source>Automatic report on what this package gets to do. It is no guarantee of safety.</source>
+        <translation>Automatic report on what this package gets to do. It is no guarantee of safety.</translation>
     </message>
     <message id="orn-coastguard-full-report">
         <source>Full report</source>
@@ -1223,25 +1219,10 @@
         <extracomment>%0 is a version and architecture</extracomment>
         <translation>Latest scanned version: %0</translation>
     </message>
-    <message id="orn-coastguard-check-pass">
-        <source>Pass</source>
-        <extracomment>Result of one malware check</extracomment>
-        <translation>Pass</translation>
-    </message>
-    <message id="orn-coastguard-check-fail">
-        <source>Fail</source>
-        <extracomment>Result of one malware check</extracomment>
-        <translation>Fail</translation>
-    </message>
-    <message id="orn-coastguard-check-notrun">
-        <source>Not run</source>
-        <extracomment>Result of one malware check</extracomment>
-        <translation>Not run</translation>
-    </message>
-    <message id="orn-coastguard-check-error">
-        <source>Error</source>
-        <extracomment>Result of one malware check</extracomment>
-        <translation>Error</translation>
+    <message id="orn-coastguard-explanation">
+        <source>Developer: %0</source>
+        <extracomment>%0 is a sentence written by the app&apos;s developer, in their own words</extracomment>
+        <translation>Developer: %0</translation>
     </message>
 </context>
 </TS>

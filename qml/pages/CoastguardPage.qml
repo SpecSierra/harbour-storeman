@@ -28,7 +28,7 @@ Page {
         if (risk) {
             for (var i = 0; i < risk.reasons.length; ++i) {
                 if (risk.reasons[i].level !== "info") {
-                    list.push(risk.reasons[i].text)
+                    list.push(risk.reasons[i])
                 }
             }
         }
@@ -51,41 +51,6 @@ Page {
             lines.push(qsTrId("orn-coastguard-more", s.changes.attention_count - shown))
         }
         return lines
-    }
-
-    // The four known-malware checks as [{ name, status }]
-    function _checks(s) {
-        var list = []
-        if (!s || !s.checks) {
-            return list
-        }
-        var names = [["clamav", "ClamAV"], ["yara", "YARA"],
-                     ["virustotal", "VirusTotal"], ["malwarebazaar", "MalwareBazaar"]]
-        for (var i = 0; i < names.length; ++i) {
-            list.push({ name: names[i][1], status: s.checks[names[i][0]] })
-        }
-        return list
-    }
-
-    function _checkStatus(status) {
-        switch (status) {
-        case "pass":
-            //: Result of one malware check
-            //% "Pass"
-            return qsTrId("orn-coastguard-check-pass")
-        case "fail":
-            //: Result of one malware check
-            //% "Fail"
-            return qsTrId("orn-coastguard-check-fail")
-        case "not run":
-            //: Result of one malware check
-            //% "Not run"
-            return qsTrId("orn-coastguard-check-notrun")
-        default:
-            //: Result of one malware check
-            //% "Error"
-            return qsTrId("orn-coastguard-check-error")
-        }
     }
 
     allowedOrientations: defaultAllowedOrientations
@@ -166,7 +131,21 @@ Page {
             Repeater {
                 id: reasons
                 model: _reasons(_risk)
-                CoastguardText { text: "• " + modelData }
+                Column {
+                    width: parent.width
+                    CoastguardText { text: "• " + modelData.text }
+                    CoastguardText {
+                        // The developer's own answer to this flag, shipped in
+                        // the package. A claim, not something Coastguard checked.
+                        visible: !!modelData.explanation
+                        color: Theme.secondaryColor
+                        font.pixelSize: Theme.fontSizeExtraSmall
+                        //: %0 is a sentence written by the app's developer, in their own words
+                        //% "Developer: %0"
+                        text: modelData.explanation ?
+                                  qsTrId("orn-coastguard-explanation").arg(modelData.explanation) : ""
+                    }
+                }
             }
 
             SectionHeader {
@@ -197,24 +176,16 @@ Page {
             }
 
             SectionHeader {
-                visible: !!_shown
-                //% "Known-malware check"
-                text: qsTrId("orn-coastguard-malware-check")
+                visible: detections.count
+                //% "Known malware"
+                text: qsTrId("orn-coastguard-headline-malware")
             }
 
             Repeater {
-                model: _checks(_summary)
-                CoastguardText {
-                    color: modelData.status === "fail" ? _errorColor : Theme.primaryColor
-                    text: modelData.name + ": " + _checkStatus(modelData.status)
-                }
-            }
-
-            Repeater {
+                id: detections
                 model: _summary ? _summary.detections : []
                 CoastguardText {
                     color: _errorColor
-                    font.pixelSize: Theme.fontSizeExtraSmall
                     text: "• " + modelData
                 }
             }
@@ -222,7 +193,7 @@ Page {
             CoastguardText {
                 color: Theme.secondaryColor
                 font.pixelSize: Theme.fontSizeExtraSmall
-                //% "Automatic scan. It cannot recognise new malware and is no guarantee of safety."
+                //% "Automatic report on what this package gets to do. It is no guarantee of safety."
                 text: qsTrId("orn-coastguard-disclaimer")
             }
 
