@@ -40,8 +40,10 @@ jobs:
         release: ${{ env.RELEASE }}
         arch: aarch64
 
+    # Upload the RPM itself, not a zip archive: the artifact is named after the file.
+    # This needs upload-artifact v7 and fails if RPMS/ holds more than one RPM.
     - name: Upload build results
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
-        name: RPM-build-results_devel-aarch64-SFOS${{ env.RELEASE }}+
-        path: RPMS/
+        path: RPMS/*.rpm
+        archive: false
