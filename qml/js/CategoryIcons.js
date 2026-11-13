@@ -1,14 +1,9 @@
 .pragma library
 
-// Font Awesome Free (solid) glyphs of the categories at OpenRepos.net, by category identifier.
-// The code points are those of fonts/fa-solid-900.ttf.
+// Font Awesome Free (solid) glyphs of the subcategories at OpenRepos.net, by category identifier.
+// The main categories have Silica theme icons instead. The code points are those of
+// fonts/fa-solid-900.ttf.
 var glyphs = {
-    1: "\uf009", // Applications: table-cells-large
-    12: "\uf11b", // Games: gamepad
-    247: "\uf1b3", // Libraries: cubes
-    3155: "\uf031", // Fonts: font
-    3413: "\uf1ab", // Translations: language
-    3092: "\uf091", // Coding Competition: trophy
     257: "\uf3cf", // Application: mobile-screen
     4206: "\uf05e", // Adult Content: ban
     1845: "\uf53f", // Ambience & Themes: palette
@@ -36,10 +31,13 @@ var glyphs = {
     18: "\uf12e", // Puzzle: puzzle-piece
     19: "\uf1e3", // Sports: futbol
     20: "\uf439", // Strategy: chess
-    21: "\uf0eb"  // Trivia: lightbulb
+    21: "\uf0eb" // Trivia: lightbulb
 }
 
-// A category that has no glyph of its own, for example a new one: a folder
+// The entry of a category that lists the applications of all its subcategories
+var all = "\uf03a"
+
+// A subcategory that has no glyph of its own, for example a new one
 var fallback = "\uf07b"
 
 function glyph(categoryId) {

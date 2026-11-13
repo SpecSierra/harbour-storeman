@@ -122,7 +122,6 @@ OTHER_FILES += \
     qml/pages/CategoryPage.qml \
     qml/pages/AuthorisationDialog.qml \
     qml/pages/DiscoverTab.qml \
-    qml/pages/CategoriesPage.qml \
     qml/pages/SearchTab.qml \
     qml/pages/MyAppsTab.qml \
     qml/pages/BookmarksPage.qml \
@@ -150,7 +149,7 @@ OTHER_FILES += \
     qml/components/SearchView.qml \
     qml/components/SectionButton.qml \
     qml/components/CategoryIcon.qml \
-    qml/components/CategoryItem.qml \
+    qml/components/SubcategoryItem.qml \
     qml/components/AppPageMenu.qml \
     qml/components/CoastguardInfo.qml \
     qml/components/CoastguardText.qml \
