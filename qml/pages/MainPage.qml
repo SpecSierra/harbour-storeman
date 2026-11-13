@@ -54,8 +54,9 @@ Page {
                 } ]
 
             delegate: TabButton {
-                // Spread the buttons over the bar; without a tab count each one centres its content
-                width: Math.max(implicitWidth, tabs.width / 3)
+                // Share the bar equally. The bar scrolls to the selected button when its
+                // buttons are wider than the screen, so they must not exceed it.
+                width: Math.floor(tabs.width / 3)
                 tabCount: 0
                 tabIndex: index
                 title: modelData.title
