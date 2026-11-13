@@ -21,5 +21,4 @@ struct OrnAppListItem
     quint32 categoryId;
     QString package;
     QDateTime createDate;
-    QDateTime updateDate;
 };

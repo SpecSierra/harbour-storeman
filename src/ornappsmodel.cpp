@@ -128,7 +128,7 @@ QVariant OrnAppsModel::data(const QModelIndex &index, int role) const
         return app.categoryId;
     case VisibilityRole:
         return OrnClient::instance()->categoryVisible(app.categoryId) &&
-               !OrnClient::instance()->isOldApp(app.updateDate);
+               !OrnClient::instance()->isOldApp(app.createDate);
     default:
         return QVariant();
     }

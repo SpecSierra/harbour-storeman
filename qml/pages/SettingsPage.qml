@@ -86,7 +86,7 @@ Page {
                 id: hideOldAppsSwitch
                 //% "Hide old applications"
                 text: qsTrId("orn-hide-old-apps")
-                //% "Do not show applications that have not been updated since the date below. Bookmarks and installed applications are always shown."
+                //% "Do not show applications older than the date below. Bookmarks and installed applications are always shown."
                 description: qsTrId("orn-hide-old-apps-descr")
                 checked: OrnClient.hideOldApps
             }
@@ -98,7 +98,7 @@ Page {
                 }
 
                 enabled: hideOldAppsSwitch.checked
-                //% "Not updated since"
+                //% "Older than"
                 label: qsTrId("orn-hide-old-apps-since")
                 value: Qt.formatDate(_toDate(_hideOldAppsBefore), Qt.DefaultLocaleShortDate)
                 onClicked: {

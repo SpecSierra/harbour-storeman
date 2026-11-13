@@ -53,12 +53,6 @@ OrnAppListItem::OrnAppListItem(const QJsonObject &data)
         sinceUpdate = sinceLabel(created);
     }
 
-    auto updated = OrnUtils::toUint(data[OrnConst::updated]);
-    if (updated > 0)
-    {
-        updateDate.setMSecsSinceEpoch(qint64(updated) * 1000);
-    }
-
     auto ratingobj = data[OrnConst::rating].toObject();
     ratingCount    = OrnUtils::toUint(ratingobj[OrnConst::count]);
     rating         = ratingobj[OrnConst::rating].toString().toFloat();

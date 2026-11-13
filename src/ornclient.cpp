@@ -425,13 +425,13 @@ void OrnClient::setHideOldAppsBefore(const QString &date)
     }
 }
 
-bool OrnClient::isOldApp(const QDateTime &updated) const
+bool OrnClient::isOldApp(const QDateTime &date) const
 {
     Q_D(const OrnClient);
 
-    // An application without a date of its update is never hidden
-    return d->hideOldApps && updated.isValid() &&
-           updated < QDateTime(d->hideOldAppsBefore, QTime(0, 0));
+    // An application without a date is never hidden
+    return d->hideOldApps && date.isValid() &&
+           date < QDateTime(d->hideOldAppsBefore, QTime(0, 0));
 }
 
 bool OrnClient::categoryVisible(quint32 categoryId) const

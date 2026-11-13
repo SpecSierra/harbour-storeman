@@ -1221,12 +1221,12 @@
         <translation>Hide old applications</translation>
     </message>
     <message id="orn-hide-old-apps-descr">
-        <source>Do not show applications that have not been updated since the date below. Bookmarks and installed applications are always shown.</source>
-        <translation>Do not show applications that have not been updated since the date below. Bookmarks and installed applications are always shown.</translation>
+        <source>Do not show applications older than the date below. Bookmarks and installed applications are always shown.</source>
+        <translation>Do not show applications older than the date below. Bookmarks and installed applications are always shown.</translation>
     </message>
     <message id="orn-hide-old-apps-since">
-        <source>Not updated since</source>
-        <translation>Not updated since</translation>
+        <source>Older than</source>
+        <translation>Older than</translation>
     </message>
 </context>
 </TS>

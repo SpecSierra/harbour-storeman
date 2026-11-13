@@ -81,8 +81,9 @@ public:
     QString hideOldAppsBefore() const;
     void setHideOldAppsBefore(const QString &date);
 
-    // Whether the application with the given date of the last update is hidden as old
-    bool isOldApp(const QDateTime &updated) const;
+    // Whether an application is hidden as old. The date is the one that the lists show as
+    // the last update: that of the latest release, not of the last edit of its page.
+    bool isOldApp(const QDateTime &date) const;
 
 public slots:
     void login(const QString &username, QString password, bool savePassword = false);
