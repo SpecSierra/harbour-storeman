@@ -6,5 +6,8 @@ Exec=harbour-storeman
 Name=Storeman
 Categories=System;Utility;Network;Settings;PackageManager;
 
+[X-Sailjail]
+Sandboxing=Disabled
+
 [X-HarbourBackup]
 BackupPathList=.config/harbour-storeman/:.local/share/harbour-storeman/
