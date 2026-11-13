@@ -119,17 +119,17 @@ OTHER_FILES += \
     qml/pages/AboutPage.qml \
     qml/pages/TranslationsPage.qml \
     qml/pages/DevelopmentPage.qml \
-    qml/pages/CategoriesPage.qml \
     qml/pages/CategoryPage.qml \
     qml/pages/AuthorisationDialog.qml \
-    qml/pages/InstalledAppsPage.qml \
+    qml/pages/DiscoverTab.qml \
+    qml/pages/SearchTab.qml \
+    qml/pages/MyAppsTab.qml \
     qml/pages/BookmarksPage.qml \
     qml/pages/ErrorPage.qml \
     qml/pages/BackupsPage.qml \
     qml/pages/RestoreDialog.qml \
     qml/pages/BackupDialog.qml \
     qml/pages/SettingsPage.qml \
-    qml/pages/MainPageOrderDialog.qml \
     qml/pages/LocalRpmsPage.qml \
     qml/pages/CategoriesFilterPage.qml \
     qml/pages/SharePage.qml \
@@ -146,8 +146,8 @@ OTHER_FILES += \
     qml/components/AppInfoLabel.qml \
     qml/components/ScreenshotsBox.qml \
     qml/components/MoreButton.qml \
-    qml/components/MainPageButton.qml \
-    qml/components/MainPageAppGridDelegate.qml \
+    qml/components/AppCarousel.qml \
+    qml/components/SearchView.qml \
     qml/components/AppPageMenu.qml \
     qml/components/CoastguardInfo.qml \
     qml/components/CoastguardText.qml \

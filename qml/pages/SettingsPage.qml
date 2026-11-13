@@ -10,7 +10,6 @@ Page {
 
     onStatusChanged: {
         if (status === PageStatus.Deactivating) {
-            Storeman.showRecentOnStart = showRecentOnStartSwitch.checked
             Storeman.smartUpdate = smartUpdateSwitch.checked
             Storeman.showUpdatesNotification = showUpdatesNotificationSwitch.checked
             Storeman.updateInterval = checkUpdatesIntervalButton.interval
@@ -112,26 +111,6 @@ Page {
                 //% "Show on application pages whether the Coastguard malware scan flagged the package. The package name is sent to GitHub, where the results are hosted."
                 description: qsTrId("orn-coastguard-switch-descr")
                 checked: Storeman.showCoastguard
-            }
-
-            SectionHeader {
-                //% "Main page"
-                text: qsTrId("orn-mainpage")
-            }
-
-            TextSwitch {
-                id: showRecentOnStartSwitch
-                //% "Show recently updated on start"
-                text: qsTrId("orn-show-recent-switch")
-                //% "Switch to the page of recently updated packages on start"
-                description: qsTrId("orn-show-recent-switch-descr")
-                checked: Storeman.showRecentOnStart
-            }
-
-            ListMenuItem {
-                iconSource: "image://theme/icon-m-transfer"
-                text: qsTrId("orn-mainpage-order")
-                onClicked: pageStack.push(Qt.resolvedUrl("MainPageOrderDialog.qml"))
             }
 
             SectionHeader {

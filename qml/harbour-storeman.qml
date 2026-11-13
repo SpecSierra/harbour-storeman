@@ -16,6 +16,9 @@ ApplicationWindow
     readonly property string dbusService: "harbour.storeman.service"
     readonly property string dbusPath: "/harbour/storeman/service"
     readonly property string dbusInterface: dbusService
+    // The indexes of the main page tabs
+    readonly property int searchTab: 1
+    readonly property int myAppsTab: 2
     //% "Show details"
     readonly property string _showDetailsId: QT_TRID_NOOP("orn-show-details")
     property bool _showUpdatesNotification: true
@@ -120,6 +123,19 @@ ApplicationWindow
         }
     }
 
+    // Returns to the main page and shows one of its tabs
+    function showMainTab(index) {
+        var mainPage = pageStack.find(function(p) {
+            return p.objectName === "MainPage"
+        })
+        if (mainPage) {
+            if (pageStack.currentPage !== mainPage) {
+                pageStack.pop(mainPage, PageStackAction.Immediate)
+            }
+            mainPage.showTab(index)
+        }
+    }
+
     function removeAuthorRepo(author) {
         OrnPm.modifyRepo("openrepos-" + author, OrnPm.RemoveRepo)
     }
@@ -168,11 +184,12 @@ ApplicationWindow
   </interface>'
 
         function openPage(page, arguments) {
+            __silica_applicationwindow_instance.activate()
+            // The installed applications are a tab of the main page
             if (page === "InstalledAppsPage") {
                 _showUpdatesNotification = false
-            }
-            __silica_applicationwindow_instance.activate()
-            if (page === "ErrorPage" || page !== pageStack.currentPage.objectName) {
+                showMainTab(myAppsTab)
+            } else if (page === "ErrorPage" || page !== pageStack.currentPage.objectName) {
                 pageStack.push(Qt.resolvedUrl("pages/%1.qml".arg(page)), arguments)
             }
         }

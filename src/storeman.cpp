@@ -26,8 +26,6 @@
 #include <QNetworkReply>
 #include <QVersionNumber>
 
-static const QString MAINPAGE_SHOW_RECENT     {QStringLiteral("mainpage/show_recent")};
-static const QString MAINPAGE_ORDER           {QStringLiteral("mainpage/order")};
 static const QString UPDATES_INTERVAL         {QStringLiteral("updates/interval")};
 static const QString UPDATES_ENABLED          {QStringLiteral("updates/enabled")};
 static const QString UPDATES_SMART            {QStringLiteral("updates/smart")};
@@ -75,56 +73,6 @@ QObject *Storeman::qmlInstance(QQmlEngine *engine, QJSEngine *scriptEngine)
 
     static Storeman instance;
     return &instance;
-}
-
-bool Storeman::showRecentOnStart() const
-{
-    return d_func()->settings.value(MAINPAGE_SHOW_RECENT).toBool();
-}
-
-void Storeman::setShowRecentOnStart(bool value)
-{
-    if (value != this->showRecentOnStart())
-    {
-        d_func()->settings.setValue(MAINPAGE_SHOW_RECENT, value);
-        emit this->showRecentOnStartChanged();
-    }
-}
-
-QVariantList Storeman::mainPageOrder() const
-{
-    auto res = d_func()->settings.value(MAINPAGE_ORDER, QVariantList({
-        RecentlyUpdated,
-        Categories,
-        Bookmarks,
-        Repositories,
-        MyRepository,
-        InstalledApps,
-        LocalRpms,
-    })).toList();
-
-    // TODO: Remove later
-    if (!res.contains(MyRepository))
-    {
-        res.insert(res.indexOf(Repositories) + 1, MyRepository);
-    }
-
-    return res;
-}
-
-void Storeman::setMainPageOrder(const QVariantList &value)
-{
-    if (this->mainPageOrder() != value)
-    {
-        d_func()->settings.setValue(MAINPAGE_ORDER, value);
-        emit this->mainPageOrderChanged();
-    }
-}
-
-void Storeman::resetMainPageOrder()
-{
-    d_func()->settings.remove(MAINPAGE_ORDER);
-    emit this->mainPageOrderChanged();
 }
 
 int Storeman::updateInterval() const

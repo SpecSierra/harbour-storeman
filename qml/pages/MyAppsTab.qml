@@ -1,14 +1,14 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import Sailfish.Silica.private 1.0
 import harbour.orn 1.0
 import "../components"
 
-Page {
+TabItem {
     property bool _working: false
 
-    id: page
-    objectName: "InstalledAppsPage"
-    allowedOrientations: defaultAllowedOrientations
+    flickable: appsList
+    allowDeletion: false
 
     SilicaListView {
         id: appsList
@@ -27,28 +27,37 @@ Page {
             }
         }
 
-        header: PageHeader {
-            //% "Installed applications"
-            title: qsTrId("orn-installed-apps")
-            //% "Only from enabled repositories"
-            description: qsTrId("orn-installed-apps-description")
+        header: Column {
+            width: parent.width
+
+            PageHeader {
+                //% "My apps"
+                title: qsTrId("orn-my-apps")
+                //% "Only from enabled repositories"
+                description: qsTrId("orn-installed-apps-description")
+            }
+
+            Button {
+                anchors.horizontalCenter: parent.horizontalCenter
+                visible: OrnPm.updatesAvailable
+                enabled: networkManager.connected && _operations && _operations.length === 0
+                //% "Update all"
+                text: qsTrId("orn-update-all")
+                onClicked: _updateAll()
+            }
         }
 
         section {
-            property: OrnPm.updatesAvailable ? "updateAvailable" : "section"
+            property: "updateAvailable"
             delegate: SectionHeader {
-                // If updates are available then show sections by status
-                // otherwise show sections by the first letter of titles
-                text: OrnPm.updatesAvailable ?
-                          (section === '1' ? qsTrId("orn-update-available") :
-                                             qsTrId("orn-installed")) :
-                          section
+                text: section === '1' ? qsTrId("orn-update-available") :
+                                        qsTrId("orn-installed")
             }
         }
 
         delegate: ListItem {
             id: item
-            contentHeight: Theme.itemSizeExtraLarge
+            contentHeight: Theme.itemSizeMedium
             onClicked: openMenu()
 
             menu: ContextMenu {
@@ -84,51 +93,42 @@ Page {
                 target: item
             }
 
-            Row {
-                id: row
+            Image {
+                id: appIcon
                 anchors {
-                    verticalCenter: parent.verticalCenter
                     left: parent.left
-                    right: parent.right
                     leftMargin: Theme.horizontalPageMargin
+                    verticalCenter: parent.verticalCenter
+                }
+                width: Theme.iconSizeMedium
+                height: Theme.iconSizeMedium
+                fillMode: Image.PreserveAspectFit
+                source: packageIcon ? packageIcon : "image://theme/icon-launcher-default"
+            }
+
+            Column {
+                anchors {
+                    left: appIcon.right
+                    leftMargin: Theme.paddingMedium
+                    right: parent.right
                     rightMargin: Theme.horizontalPageMargin
-                }
-                spacing: Theme.paddingMedium
-
-                Image {
-                    id: appIcon
-                    anchors.verticalCenter: parent.verticalCenter
-                    width: Theme.iconSizeLauncher
-                    height: Theme.iconSizeLauncher
-                    fillMode: Image.PreserveAspectFit
-                    source: packageIcon ? packageIcon : "image://theme/icon-launcher-default"
+                    verticalCenter: parent.verticalCenter
                 }
 
-                Column {
-                    id: column
-                    anchors.verticalCenter: parent.verticalCenter
-                    width: row.width - appIcon.width - Theme.paddingMedium
-                    spacing: Theme.paddingSmall
+                Label {
+                    width: parent.width
+                    truncationMode: TruncationMode.Fade
+                    color: item.highlighted ? Theme.highlightColor : Theme.primaryColor
+                    text: packageTitle
+                }
 
-                    Label {
-                        id: titleLabel
-                        width: parent.width
-                        maximumLineCount: 2
-                        verticalAlignment: Qt.AlignVCenter
-                        font.pixelSize: Theme.fontSizeExtraSmall
-                        wrapMode: Text.WordWrap
-                        text: packageTitle
-                    }
-
-                    Label {
-                        id: versionLabel
-                        width: parent.width
-                        font.pixelSize: Theme.fontSizeExtraSmall
-                        color: Theme.secondaryColor
-                        text: updateAvailable ? packageVersion + " ➝ " + updateVersion :
-                                                packageVersion
-
-                    }
+                Label {
+                    width: parent.width
+                    truncationMode: TruncationMode.Fade
+                    font.pixelSize: Theme.fontSizeExtraSmall
+                    color: item.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
+                    text: updateAvailable ? packageVersion + " ➝ " + updateVersion :
+                                            packageVersion
                 }
             }
         }
@@ -136,16 +136,19 @@ Page {
         PullDownMenu {
             id: menu
 
-            RefreshMenuItem {
-                model: installedAppsModel
+            MenuItem {
+                text: qsTrId("orn-local-rpms")
+                onClicked: pageStack.push(Qt.resolvedUrl("LocalRpmsPage.qml"))
             }
 
             MenuItem {
-                visible: OrnPm.updatesAvailable
-                enabled: networkManager.connected && _operations && _operations.length === 0
-                //% "Update all"
-                text: qsTrId("orn-update-all")
-                onClicked: _updateAll()
+                enabled: networkManager.connected
+                text: qsTrId("orn-bookmarks")
+                onClicked: pageStack.push(Qt.resolvedUrl("BookmarksPage.qml"))
+            }
+
+            RefreshMenuItem {
+                model: installedAppsModel
             }
 
             MenuStatusLabel { }
@@ -160,7 +163,6 @@ Page {
         }
 
         ViewPlaceholder {
-            id: viewPlaceholder
             enabled: appsList.count === 0 && !_working
             //% "Could not find any applications installed from OpenRepos"
             text: qsTrId("orn-no-installed-apps")

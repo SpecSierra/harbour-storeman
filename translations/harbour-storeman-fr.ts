@@ -1061,5 +1061,17 @@
         <source>Storeman OBS Repository</source>
         <translation>Dépôt Storeman OBS</translation>
     </message>
+    <message id="orn-discover">
+        <source>Discover</source>
+        <translation>Découvrir</translation>
+    </message>
+    <message id="orn-my-apps">
+        <source>My apps</source>
+        <translation>Mes applis</translation>
+    </message>
+    <message id="orn-games">
+        <source>Games</source>
+        <translation>Jeux</translation>
+    </message>
 </context>
 </TS>

@@ -484,10 +484,6 @@
         <source>Disabling all</source>
         <translation>Disabling all</translation>
     </message>
-    <message id="orn-installed-apps">
-        <source>Installed applications</source>
-        <translation>Installed applications</translation>
-    </message>
     <message id="orn-bookmarks-added">
         <source>The app was added to bookmarks</source>
         <translation>The app was added to bookmarks</translation>
@@ -944,29 +940,9 @@
         <source>Tap again to close the hint</source>
         <translation>Tap again to close the hint</translation>
     </message>
-    <message id="orn-mainpage">
-        <source>Main page</source>
-        <translation>Main page</translation>
-    </message>
-    <message id="orn-show-recent-switch">
-        <source>Show recently updated on start</source>
-        <translation>Show recently updated on start</translation>
-    </message>
-    <message id="orn-show-recent-switch-descr">
-        <source>Switch to the page of recently updated packages on start</source>
-        <translation>Switch to the page of recently updated packages on start</translation>
-    </message>
-    <message id="orn-mainpage-order">
-        <source>Order items</source>
-        <translation>Order items</translation>
-    </message>
     <message id="orn-reset">
         <source>Reset</source>
         <translation>Reset</translation>
-    </message>
-    <message id="orn-mainpage-order-description">
-        <source>Drag items to change their order</source>
-        <translation>Drag items to change their order</translation>
     </message>
     <message id="orn-cat-adult-content">
         <source>Adult Content</source>
@@ -1223,6 +1199,18 @@
         <source>Developer: %0</source>
         <extracomment>%0 is a sentence written by the app&apos;s developer, in their own words</extracomment>
         <translation>Developer: %0</translation>
+    </message>
+    <message id="orn-discover">
+        <source>Discover</source>
+        <translation>Discover</translation>
+    </message>
+    <message id="orn-my-apps">
+        <source>My apps</source>
+        <translation>My apps</translation>
+    </message>
+    <message id="orn-games">
+        <source>Games</source>
+        <translation>Games</translation>
     </message>
 </context>
 </TS>
