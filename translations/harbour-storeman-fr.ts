@@ -1073,5 +1073,9 @@
         <source>Games</source>
         <translation>Jeux</translation>
     </message>
+    <message id="orn-category-all">
+        <source>All</source>
+        <translation>Tout</translation>
+    </message>
 </context>
 </TS>

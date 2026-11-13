@@ -1212,5 +1212,9 @@
         <source>Games</source>
         <translation>Games</translation>
     </message>
+    <message id="orn-category-all">
+        <source>All</source>
+        <translation>All</translation>
+    </message>
 </context>
 </TS>

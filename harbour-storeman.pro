@@ -147,6 +147,8 @@ OTHER_FILES += \
     qml/components/MoreButton.qml \
     qml/components/AppCarousel.qml \
     qml/components/SearchView.qml \
+    qml/components/SectionButton.qml \
+    qml/components/SubcategoryItem.qml \
     qml/components/AppPageMenu.qml \
     qml/components/CoastguardInfo.qml \
     qml/components/CoastguardText.qml \

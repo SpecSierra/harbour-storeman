@@ -54,6 +54,9 @@ Page {
                 } ]
 
             delegate: TabButton {
+                // Spread the buttons over the bar; without a tab count each one centres its content
+                width: Math.max(implicitWidth, tabs.width / 3)
+                tabCount: 0
                 tabIndex: index
                 title: modelData.title
                 icon.source: modelData.icon
