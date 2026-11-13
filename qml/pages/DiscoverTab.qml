@@ -10,16 +10,6 @@ TabItem {
     // Categories can be hidden in the settings
     property bool _showGames: OrnClient.categoryVisible(_gamesCategoryId)
 
-    // Theme icons for the top level categories at OpenRepos.net
-    readonly property var _categoryIcons: ({
-        1: "icon-m-add-to-grid",        // Applications
-        12: "icon-m-game-controller",   // Games
-        247: "icon-m-levels",           // Libraries
-        3092: "icon-m-computer",        // Coding Competition
-        3155: "icon-m-font-size",       // Fonts
-        3413: "icon-m-region"           // Translations
-    })
-
     function _openCategory(id, name) {
         pageStack.push(Qt.resolvedUrl("CategoryPage.qml"), {
                            categoryId: id,
@@ -53,7 +43,7 @@ TabItem {
     Connections {
         target: networkManager
         onStateChanged: {
-            if (networkManager.connected && categoriesModel.rowCount() === 0) {
+            if (networkManager.connected && recentAppsModel.rowCount() === 0) {
                 _refresh()
             }
         }
@@ -163,114 +153,13 @@ TabItem {
                     model: gamesModel
                 }
 
-                Label {
-                    x: Theme.horizontalPageMargin
-                    height: Theme.itemSizeSmall
-                    verticalAlignment: Text.AlignVCenter
-                    font.pixelSize: Theme.fontSizeLarge
+                SectionButton {
                     //% "Categories"
                     text: qsTrId("orn-categories")
-                }
-
-                Repeater {
-                    model: categoriesModel
-
-                    // A top level category: one that has subcategories expands to show them
-                    delegate: Column {
-                        id: category
-
-                        readonly property int categoryId: model.categoryId
-                        readonly property string categoryName: model.name
-                        readonly property var subcategoryIds: model.children
-                        readonly property bool expandable: subcategoryIds.length > 0
-                        property bool expanded: false
-
-                        width: parent.width
-                        visible: model.depth === 0
-
-                        BackgroundItem {
-                            id: categoryItem
-                            height: Theme.itemSizeSmall
-                            onClicked: {
-                                if (category.expandable) {
-                                    category.expanded = !category.expanded
-                                } else {
-                                    _openCategory(category.categoryId, category.categoryName)
-                                }
-                            }
-
-                            Icon {
-                                id: categoryIcon
-                                anchors {
-                                    left: parent.left
-                                    leftMargin: Theme.horizontalPageMargin
-                                    verticalCenter: parent.verticalCenter
-                                }
-                                source: "image://theme/" + (_categoryIcons[category.categoryId] || "icon-m-other")
-                                highlighted: categoryItem.highlighted
-                            }
-
-                            Label {
-                                anchors {
-                                    left: categoryIcon.right
-                                    leftMargin: Theme.paddingLarge
-                                    right: stateIcon.left
-                                    rightMargin: Theme.paddingMedium
-                                    verticalCenter: parent.verticalCenter
-                                }
-                                truncationMode: TruncationMode.Fade
-                                color: categoryItem.highlighted ? Theme.highlightColor : Theme.primaryColor
-                                text: category.categoryName
-                            }
-
-                            Icon {
-                                id: stateIcon
-                                anchors {
-                                    right: parent.right
-                                    rightMargin: Theme.horizontalPageMargin
-                                    verticalCenter: parent.verticalCenter
-                                }
-                                source: "image://theme/icon-m-" + (!category.expandable ? "right" :
-                                                                   category.expanded ? "up" : "down")
-                                highlighted: categoryItem.highlighted
-                            }
-                        }
-
-                        Item {
-                            width: parent.width
-                            height: category.expanded ? subcategories.height : 0
-                            visible: height > 0
-                            clip: true
-
-                            Behavior on height {
-                                NumberAnimation {
-                                    duration: 200
-                                    easing.type: Easing.InOutQuad
-                                }
-                            }
-
-                            Column {
-                                id: subcategories
-                                width: parent.width
-
-                                SubcategoryItem {
-                                    //: The entry of a category which lists the applications of all its subcategories
-                                    //% "All"
-                                    text: qsTrId("orn-category-all")
-                                    onClicked: _openCategory(category.categoryId, category.categoryName)
-                                }
-
-                                Repeater {
-                                    model: category.expandable ? categoriesModel : null
-                                    delegate: SubcategoryItem {
-                                        visible: category.subcategoryIds.indexOf(model.categoryId) !== -1
-                                        text: model.name
-                                        onClicked: _openCategory(model.categoryId, text)
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    onClicked: pageStack.push(Qt.resolvedUrl("CategoriesPage.qml"), {
+                                                  model: categoriesModel,
+                                                  title: text
+                                              })
                 }
             }
         }

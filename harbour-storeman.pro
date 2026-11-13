@@ -122,6 +122,7 @@ OTHER_FILES += \
     qml/pages/CategoryPage.qml \
     qml/pages/AuthorisationDialog.qml \
     qml/pages/DiscoverTab.qml \
+    qml/pages/CategoriesPage.qml \
     qml/pages/SearchTab.qml \
     qml/pages/MyAppsTab.qml \
     qml/pages/BookmarksPage.qml \
@@ -148,7 +149,8 @@ OTHER_FILES += \
     qml/components/AppCarousel.qml \
     qml/components/SearchView.qml \
     qml/components/SectionButton.qml \
-    qml/components/SubcategoryItem.qml \
+    qml/components/CategoryIcon.qml \
+    qml/components/CategoryItem.qml \
     qml/components/AppPageMenu.qml \
     qml/components/CoastguardInfo.qml \
     qml/components/CoastguardText.qml \
@@ -173,6 +175,9 @@ OTHER_FILES += \
     qml/components/IntervalView.qml \
     qml/components/ListViewPositionAnimation.qml \
     qml/components/ShareLinkAction.qml \
+    qml/js/CategoryIcons.js \
+    qml/fonts/fa-solid-900.ttf \
+    qml/fonts/FontAwesome-LICENSE.txt \
     qml/models/DevelopersModel.qml \
     qml/models/TranslatorsModel.qml \
     qml/models/DummyCommentsModel.qml

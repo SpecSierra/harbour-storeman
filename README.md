@@ -10,6 +10,7 @@
 - Search for applications
 - List recently updated applications
 - List categories and applications by categories
+- Category icons are from [Font Awesome Free](https://fontawesome.com/) (SIL OFL 1.1, see `qml/fonts/`)
 - All lists are scrollable while online data is loaded in the background
 - Show application info similarly to the Jolla store client
 - Show categories on the applications page - tap on a category label to show all related applications

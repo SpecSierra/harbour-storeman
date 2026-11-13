@@ -16,6 +16,8 @@ ApplicationWindow
     readonly property string dbusService: "harbour.storeman.service"
     readonly property string dbusPath: "/harbour/storeman/service"
     readonly property string dbusInterface: dbusService
+    // The font of the icons of the categories (Font Awesome Free)
+    readonly property string iconFontFamily: iconFont.name
     // The indexes of the main page tabs
     readonly property int searchTab: 1
     readonly property int myAppsTab: 2
@@ -154,6 +156,11 @@ ApplicationWindow
 
     NetworkManager {
         id: networkManager
+    }
+
+    FontLoader {
+        id: iconFont
+        source: Qt.resolvedUrl("fonts/fa-solid-900.ttf")
     }
 
     DBusAdaptor {
