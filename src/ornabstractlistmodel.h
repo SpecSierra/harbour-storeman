@@ -18,6 +18,7 @@ class OrnAbstractListModelBase : public QAbstractListModel
     Q_OBJECT
     Q_PROPERTY(bool fetching READ fetching NOTIFY fetchingChanged)
     Q_PROPERTY(bool networkError READ networkError NOTIFY networkErrorChanged)
+    Q_PROPERTY(bool allFetched READ allFetched NOTIFY fetchingChanged)
 
 public:
     OrnAbstractListModelBase(QObject *parent = nullptr)
@@ -26,6 +27,8 @@ public:
 
     bool fetching() const { return mFetching; }
     bool networkError() const { return mNetworkError; }
+    // True when the server has no more data to give
+    bool allFetched() const { return !mCanFetchMore; }
 
 public slots:
     void reset() { this->resetImpl(); }

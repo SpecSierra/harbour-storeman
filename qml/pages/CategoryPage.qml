@@ -12,12 +12,13 @@ Page {
     OrnAppsModel {
         id: categoryModel
         resource: "categories/%0/apps".arg(categoryId)
-        onFetchingChanged: {
-            if (!fetching && rowCount() === 0) {
-                //% "Currently there are no apps in this category"
-                viewPlaceholder.text = qsTrId("orn-category-noapps")
-            }
-        }
+    }
+
+    // Leaves out the applications hidden by the settings
+    OrnProxyModel {
+        id: proxyModel
+        sourceModel: categoryModel
+        filterRole: OrnAppsModel.VisibilityRole
     }
 
     SilicaListView {
@@ -28,7 +29,7 @@ Page {
             title: categoryName
         }
 
-        model: networkManager.connected ? categoryModel : null
+        model: networkManager.connected ? proxyModel : null
 
         delegate: AppListDelegate { }
 
@@ -65,6 +66,10 @@ Page {
                 if (categoryModel.networkError) {
                     hintText = qsTrId("orn-pull-refresh")
                     return qsTrId("orn-network-error")
+                }
+                if (categoryModel.allFetched && !categoryModel.fetching && categoryList.count === 0) {
+                    //% "Currently there are no apps in this category"
+                    return qsTrId("orn-category-noapps")
                 }
                 return ""
             }
