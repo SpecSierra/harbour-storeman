@@ -172,105 +172,63 @@ TabItem {
                     text: qsTrId("orn-categories")
                 }
 
+                // The main categories: one that has subcategories opens the list of them
                 Repeater {
                     model: categoriesModel
 
-                    // A top level category: one that has subcategories expands to show them
-                    delegate: Column {
-                        id: category
+                    delegate: BackgroundItem {
+                        id: categoryItem
 
-                        readonly property int categoryId: model.categoryId
-                        readonly property string categoryName: model.name
                         readonly property var subcategoryIds: model.children
-                        readonly property bool expandable: subcategoryIds.length > 0
-                        property bool expanded: false
 
-                        width: parent.width
                         visible: model.depth === 0
-
-                        BackgroundItem {
-                            id: categoryItem
-                            height: Theme.itemSizeSmall
-                            onClicked: {
-                                if (category.expandable) {
-                                    category.expanded = !category.expanded
-                                } else {
-                                    _openCategory(category.categoryId, category.categoryName)
-                                }
-                            }
-
-                            Icon {
-                                id: categoryIcon
-                                anchors {
-                                    left: parent.left
-                                    leftMargin: Theme.horizontalPageMargin
-                                    verticalCenter: parent.verticalCenter
-                                }
-                                source: "image://theme/" + (_categoryIcons[category.categoryId] || "icon-m-other")
-                                highlighted: categoryItem.highlighted
-                            }
-
-                            Label {
-                                anchors {
-                                    left: categoryIcon.right
-                                    leftMargin: Theme.paddingLarge
-                                    right: stateIcon.left
-                                    rightMargin: Theme.paddingMedium
-                                    verticalCenter: parent.verticalCenter
-                                }
-                                truncationMode: TruncationMode.Fade
-                                color: categoryItem.highlighted ? Theme.highlightColor : Theme.primaryColor
-                                text: category.categoryName
-                            }
-
-                            Icon {
-                                id: stateIcon
-                                anchors {
-                                    right: parent.right
-                                    rightMargin: Theme.horizontalPageMargin
-                                    verticalCenter: parent.verticalCenter
-                                }
-                                source: "image://theme/icon-m-" + (!category.expandable ? "right" :
-                                                                   category.expanded ? "up" : "down")
-                                highlighted: categoryItem.highlighted
+                        height: Theme.itemSizeSmall
+                        onClicked: {
+                            if (subcategoryIds.length > 0) {
+                                pageStack.push(Qt.resolvedUrl("SubcategoriesPage.qml"), {
+                                                   model: categoriesModel,
+                                                   categoryId: model.categoryId,
+                                                   categoryName: model.name,
+                                                   subcategoryIds: subcategoryIds
+                                               })
+                            } else {
+                                _openCategory(model.categoryId, model.name)
                             }
                         }
 
-                        Item {
-                            width: parent.width
-                            height: category.expanded ? subcategories.height : 0
-                            visible: height > 0
-                            clip: true
-
-                            Behavior on height {
-                                NumberAnimation {
-                                    duration: 200
-                                    easing.type: Easing.InOutQuad
-                                }
+                        Icon {
+                            id: categoryIcon
+                            anchors {
+                                left: parent.left
+                                leftMargin: Theme.horizontalPageMargin
+                                verticalCenter: parent.verticalCenter
                             }
+                            source: "image://theme/" + (_categoryIcons[model.categoryId] || "icon-m-other")
+                            highlighted: categoryItem.highlighted
+                        }
 
-                            Column {
-                                id: subcategories
-                                width: parent.width
-
-                                SubcategoryItem {
-                                    isAll: true
-                                    //: The entry of a category which lists the applications of all its subcategories
-                                    //% "All"
-                                    text: qsTrId("orn-category-all")
-                                    onClicked: _openCategory(category.categoryId, category.categoryName)
-                                }
-
-                                Repeater {
-                                    model: category.expandable ? categoriesModel : null
-                                    delegate: SubcategoryItem {
-                                        visible: category.subcategoryIds.indexOf(model.categoryId) !== -1
-                                        categoryId: model.categoryId
-                                        text: model.name
-                                        onClicked: _openCategory(model.categoryId, text)
-                                    }
-                                }
+                        Label {
+                            anchors {
+                                left: categoryIcon.right
+                                leftMargin: Theme.paddingLarge
+                                right: arrow.left
+                                rightMargin: Theme.paddingMedium
+                                verticalCenter: parent.verticalCenter
                             }
+                            truncationMode: TruncationMode.Fade
+                            color: categoryItem.highlighted ? Theme.highlightColor : Theme.primaryColor
+                            text: model.name
+                        }
+
+                        Icon {
+                            id: arrow
+                            anchors {
+                                right: parent.right
+                                rightMargin: Theme.horizontalPageMargin
+                                verticalCenter: parent.verticalCenter
+                            }
+                            source: "image://theme/icon-m-right"
+                            highlighted: categoryItem.highlighted
                         }
                     }
                 }

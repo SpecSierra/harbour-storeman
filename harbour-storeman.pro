@@ -122,6 +122,7 @@ OTHER_FILES += \
     qml/pages/CategoryPage.qml \
     qml/pages/AuthorisationDialog.qml \
     qml/pages/DiscoverTab.qml \
+    qml/pages/SubcategoriesPage.qml \
     qml/pages/SearchTab.qml \
     qml/pages/MyAppsTab.qml \
     qml/pages/BookmarksPage.qml \
