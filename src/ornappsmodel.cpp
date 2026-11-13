@@ -40,6 +40,17 @@ OrnAppsModel::OrnAppsModel(bool fetchable, QObject *parent)
         }
     });
 
+    connect(OrnClient::instance(), &OrnClient::hideOldAppsChanged,
+            this, [this]()
+    {
+        if (!mData.empty())
+        {
+            emit this->dataChanged(this->createIndex(0, 0),
+                                   this->createIndex(int(mData.size()) - 1, 0),
+                                   {VisibilityRole});
+        }
+    });
+
     connect(OrnClient::instance(), &OrnClient::categoryVisibilityChanged,
             this, [this](quint32 categoryId, bool visible)
     {
@@ -116,7 +127,8 @@ QVariant OrnAppsModel::data(const QModelIndex &index, int role) const
     case CategoryIdRole:
         return app.categoryId;
     case VisibilityRole:
-        return OrnClient::instance()->categoryVisible(app.categoryId);
+        return OrnClient::instance()->categoryVisible(app.categoryId) &&
+               !OrnClient::instance()->isOldApp(app.updateDate);
     default:
         return QVariant();
     }

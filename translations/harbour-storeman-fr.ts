@@ -1077,5 +1077,13 @@
         <source>All</source>
         <translation>Tout</translation>
     </message>
+    <message id="orn-hide-old-apps">
+        <source>Hide old applications</source>
+        <translation>Masquer les anciennes applications</translation>
+    </message>
+    <message id="orn-hide-old-apps-descr">
+        <source>Do not show applications that have not been updated since 2020. Bookmarks and installed applications are always shown.</source>
+        <translation>Ne pas afficher les applications qui n&apos;ont pas été mises à jour depuis 2020. Les favoris et les applications installées restent toujours visibles.</translation>
+    </message>
 </context>
 </TS>

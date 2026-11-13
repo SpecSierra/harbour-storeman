@@ -31,6 +31,7 @@ public:
     QNetworkAccessManager *nam{nullptr};
     QSet<quint32> bookmarks;
     QSet<quint32> hiddenCategories;
+    bool hideOldApps{false};
     QByteArray lang;
     QByteArray userToken;
     QNetworkCookie userCookie;

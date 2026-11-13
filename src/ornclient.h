@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QObject>
+#include <QDateTime>
 #include <QUrlQuery>
 
 class QQmlEngine;
@@ -22,6 +23,7 @@ class OrnClient : public QObject
     Q_PROPERTY(quint32 userId READ userId NOTIFY authorisedChanged)
     Q_PROPERTY(QString userName READ userName NOTIFY authorisedChanged)
     Q_PROPERTY(QString userIconSource READ userIconSource NOTIFY authorisedChanged)
+    Q_PROPERTY(bool hideOldApps READ hideOldApps WRITE setHideOldApps NOTIFY hideOldAppsChanged)
 
 public:
 
@@ -71,6 +73,15 @@ public:
     Q_INVOKABLE void setCategoryVisibility(quint32 categoryId, bool visible);
     Q_INVOKABLE void toggleCategoryVisibility(quint32 categoryId);
 
+    // Applications not updated since this date are hidden when hideOldApps is set
+    static QDateTime oldAppsDate();
+
+    bool hideOldApps() const;
+    void setHideOldApps(bool hide);
+
+    // Whether the application with the given date of the last update is hidden as old
+    bool isOldApp(const QDateTime &updated) const;
+
 public slots:
     void login(const QString &username, QString password, bool savePassword = false);
     void logout();
@@ -89,6 +100,7 @@ signals:
     void commentActionFinished(OrnClient::CommentAction action, quint32 appId, quint32 cid);
     void bookmarkChanged(quint32 appid, bool bookmarked);
     void categoryVisibilityChanged(quint32 categoryId, bool visible);
+    void hideOldAppsChanged();
     void userVoteFinished(quint32 appId, quint32 userVote, quint32 count, float rating);
 
 private:

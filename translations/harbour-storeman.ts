@@ -1216,5 +1216,13 @@
         <source>All</source>
         <translation>All</translation>
     </message>
+    <message id="orn-hide-old-apps">
+        <source>Hide old applications</source>
+        <translation>Hide old applications</translation>
+    </message>
+    <message id="orn-hide-old-apps-descr">
+        <source>Do not show applications that have not been updated since 2020. Bookmarks and installed applications are always shown.</source>
+        <translation>Do not show applications that have not been updated since 2020. Bookmarks and installed applications are always shown.</translation>
+    </message>
 </context>
 </TS>

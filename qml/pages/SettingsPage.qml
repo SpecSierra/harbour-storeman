@@ -17,6 +17,7 @@ Page {
             Storeman.refreshOnSystemUpgrade = resfreshCacheSwitch.checked
             Storeman.searchUnusedRepos = searchUnusedSwitch.checked
             Storeman.showCoastguard = showCoastguardSwitch.checked
+            OrnClient.hideOldApps = hideOldAppsSwitch.checked
         }
     }
 
@@ -75,6 +76,15 @@ Page {
                 iconSource: "image://theme/icon-m-certificates"
                 text: qsTrId("orn-categories-filter")
                 onClicked: pageStack.push(Qt.resolvedUrl("CategoriesFilterPage.qml"))
+            }
+
+            TextSwitch {
+                id: hideOldAppsSwitch
+                //% "Hide old applications"
+                text: qsTrId("orn-hide-old-apps")
+                //% "Do not show applications that have not been updated since 2020. Bookmarks and installed applications are always shown."
+                description: qsTrId("orn-hide-old-apps-descr")
+                checked: OrnClient.hideOldApps
             }
 
             SectionHeader {

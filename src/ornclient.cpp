@@ -29,6 +29,7 @@ static const QString SECRET_PASSWORD     {QStringLiteral("password")};
 static const QByteArray APPLICATION_JSON {QByteArrayLiteral("application/json")};
 
 static const QString CATEGORIES_FILE     {QStringLiteral("hidden_categories")};
+static const QString HIDE_OLD_APPS       {QStringLiteral("filter/hide_old_apps")};
 
 
 void readIds(const QString &filename, QSet<quint32> &store)
@@ -174,6 +175,7 @@ OrnClient::OrnClient(QObject *parent)
     Q_D(OrnClient);
 
     d->settings = new QSettings(this);
+    d->hideOldApps = d->settings->value(HIDE_OLD_APPS, false).toBool();
     d->cookieTimer = new QTimer(this);
     d->nam = new QNetworkAccessManager(this);
     d->lang = QLocale::system().name().left(2).toUtf8();
@@ -380,6 +382,34 @@ bool OrnClient::removeBookmark(quint32 appId)
         emit this->bookmarkChanged(appId, false);
     }
     return ok;
+}
+
+QDateTime OrnClient::oldAppsDate()
+{
+    return QDateTime(QDate(2020, 1, 1), QTime(0, 0), Qt::UTC);
+}
+
+bool OrnClient::hideOldApps() const
+{
+    return this->d_func()->hideOldApps;
+}
+
+void OrnClient::setHideOldApps(bool hide)
+{
+    Q_D(OrnClient);
+
+    if (d->hideOldApps != hide)
+    {
+        d->hideOldApps = hide;
+        d->settings->setValue(HIDE_OLD_APPS, hide);
+        emit this->hideOldAppsChanged();
+    }
+}
+
+bool OrnClient::isOldApp(const QDateTime &updated) const
+{
+    // An application without a date of its update is never hidden
+    return this->d_func()->hideOldApps && updated.isValid() && updated < oldAppsDate();
 }
 
 bool OrnClient::categoryVisible(quint32 categoryId) const
