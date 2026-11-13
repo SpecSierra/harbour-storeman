@@ -1,5 +1,7 @@
 #include "orncategoriesmodel.h"
 #include "ornclient.h"
+#include "ornconst.h"
+#include "ornutils.h"
 
 #include <QUrl>
 #include <QNetworkRequest>
@@ -7,6 +9,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
+#include <algorithm>
 #include <functional>
 
 OrnCategoriesModel::OrnCategoriesModel(QObject *parent)
@@ -119,9 +122,28 @@ void OrnCategoriesModel::processReply(const QJsonDocument &jsonDoc)
         }
     };
 
+    // The top level categories come in the order of the server, which puts the
+    // largest ones among the small ones: list the main categories first.
+    static const QList<quint32> mainCategories{1, 12, 247, 3155, 3413, 3092};
+    QList<QJsonObject> topLevel;
     for (const QJsonValueRef category : categoriesArray)
     {
-        parse(mData, category.toObject());
+        topLevel.append(category.toObject());
+    }
+    std::stable_sort(topLevel.begin(), topLevel.end(),
+                     [](const QJsonObject &a, const QJsonObject &b)
+    {
+        auto rank = [](const QJsonObject &category)
+        {
+            auto index = mainCategories.indexOf(OrnUtils::toUint(category[OrnConst::tid]));
+            return index < 0 ? mainCategories.size() : index;
+        };
+        return rank(a) < rank(b);
+    });
+
+    for (const auto &category : topLevel)
+    {
+        parse(mData, category);
     }
 
     auto size = mData.size();
