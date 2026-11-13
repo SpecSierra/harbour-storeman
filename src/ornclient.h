@@ -24,6 +24,8 @@ class OrnClient : public QObject
     Q_PROPERTY(QString userName READ userName NOTIFY authorisedChanged)
     Q_PROPERTY(QString userIconSource READ userIconSource NOTIFY authorisedChanged)
     Q_PROPERTY(bool hideOldApps READ hideOldApps WRITE setHideOldApps NOTIFY hideOldAppsChanged)
+    // The date as "yyyy-MM-dd": applications not updated since it are hidden when hideOldApps is set
+    Q_PROPERTY(QString hideOldAppsBefore READ hideOldAppsBefore WRITE setHideOldAppsBefore NOTIFY hideOldAppsChanged)
 
 public:
 
@@ -73,11 +75,11 @@ public:
     Q_INVOKABLE void setCategoryVisibility(quint32 categoryId, bool visible);
     Q_INVOKABLE void toggleCategoryVisibility(quint32 categoryId);
 
-    // Applications not updated since this date are hidden when hideOldApps is set
-    static QDateTime oldAppsDate();
-
     bool hideOldApps() const;
     void setHideOldApps(bool hide);
+
+    QString hideOldAppsBefore() const;
+    void setHideOldAppsBefore(const QString &date);
 
     // Whether the application with the given date of the last update is hidden as old
     bool isOldApp(const QDateTime &updated) const;

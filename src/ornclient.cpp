@@ -30,6 +30,7 @@ static const QByteArray APPLICATION_JSON {QByteArrayLiteral("application/json")}
 
 static const QString CATEGORIES_FILE     {QStringLiteral("hidden_categories")};
 static const QString HIDE_OLD_APPS       {QStringLiteral("filter/hide_old_apps")};
+static const QString HIDE_OLD_APPS_DATE  {QStringLiteral("filter/hide_old_apps_before")};
 
 
 void readIds(const QString &filename, QSet<quint32> &store)
@@ -176,6 +177,11 @@ OrnClient::OrnClient(QObject *parent)
 
     d->settings = new QSettings(this);
     d->hideOldApps = d->settings->value(HIDE_OLD_APPS, false).toBool();
+    auto hideBefore = QDate::fromString(d->settings->value(HIDE_OLD_APPS_DATE).toString(), Qt::ISODate);
+    if (hideBefore.isValid())
+    {
+        d->hideOldAppsBefore = hideBefore;
+    }
     d->cookieTimer = new QTimer(this);
     d->nam = new QNetworkAccessManager(this);
     d->lang = QLocale::system().name().left(2).toUtf8();
@@ -384,11 +390,6 @@ bool OrnClient::removeBookmark(quint32 appId)
     return ok;
 }
 
-QDateTime OrnClient::oldAppsDate()
-{
-    return QDateTime(QDate(2020, 1, 1), QTime(0, 0), Qt::UTC);
-}
-
 bool OrnClient::hideOldApps() const
 {
     return this->d_func()->hideOldApps;
@@ -406,10 +407,31 @@ void OrnClient::setHideOldApps(bool hide)
     }
 }
 
+QString OrnClient::hideOldAppsBefore() const
+{
+    return this->d_func()->hideOldAppsBefore.toString(Qt::ISODate);
+}
+
+void OrnClient::setHideOldAppsBefore(const QString &date)
+{
+    Q_D(OrnClient);
+
+    auto value = QDate::fromString(date, Qt::ISODate);
+    if (value.isValid() && d->hideOldAppsBefore != value)
+    {
+        d->hideOldAppsBefore = value;
+        d->settings->setValue(HIDE_OLD_APPS_DATE, value.toString(Qt::ISODate));
+        emit this->hideOldAppsChanged();
+    }
+}
+
 bool OrnClient::isOldApp(const QDateTime &updated) const
 {
+    Q_D(const OrnClient);
+
     // An application without a date of its update is never hidden
-    return this->d_func()->hideOldApps && updated.isValid() && updated < oldAppsDate();
+    return d->hideOldApps && updated.isValid() &&
+           updated < QDateTime(d->hideOldAppsBefore, QTime(0, 0));
 }
 
 bool OrnClient::categoryVisible(quint32 categoryId) const

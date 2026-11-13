@@ -5,6 +5,9 @@ import "../components"
 
 
 Page {
+    // The date as "yyyy-MM-dd", applied when leaving the page
+    property string _hideOldAppsBefore: OrnClient.hideOldAppsBefore
+
     id: page
     allowedOrientations: defaultAllowedOrientations
 
@@ -18,6 +21,7 @@ Page {
             Storeman.searchUnusedRepos = searchUnusedSwitch.checked
             Storeman.showCoastguard = showCoastguardSwitch.checked
             OrnClient.hideOldApps = hideOldAppsSwitch.checked
+            OrnClient.hideOldAppsBefore = _hideOldAppsBefore
         }
     }
 
@@ -82,9 +86,29 @@ Page {
                 id: hideOldAppsSwitch
                 //% "Hide old applications"
                 text: qsTrId("orn-hide-old-apps")
-                //% "Do not show applications that have not been updated since 2020. Bookmarks and installed applications are always shown."
+                //% "Do not show applications that have not been updated since the date below. Bookmarks and installed applications are always shown."
                 description: qsTrId("orn-hide-old-apps-descr")
                 checked: OrnClient.hideOldApps
+            }
+
+            ValueButton {
+                function _toDate(iso) {
+                    var parts = iso.split("-")
+                    return new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10))
+                }
+
+                enabled: hideOldAppsSwitch.checked
+                //% "Not updated since"
+                label: qsTrId("orn-hide-old-apps-since")
+                value: Qt.formatDate(_toDate(_hideOldAppsBefore), Qt.DefaultLocaleShortDate)
+                onClicked: {
+                    var dialog = pageStack.push("Sailfish.Silica.DatePickerDialog", {
+                                                    date: _toDate(_hideOldAppsBefore)
+                                                })
+                    dialog.accepted.connect(function() {
+                        _hideOldAppsBefore = Qt.formatDate(dialog.date, "yyyy-MM-dd")
+                    })
+                }
             }
 
             SectionHeader {

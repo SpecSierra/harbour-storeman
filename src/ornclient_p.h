@@ -32,6 +32,7 @@ public:
     QSet<quint32> bookmarks;
     QSet<quint32> hiddenCategories;
     bool hideOldApps{false};
+    QDate hideOldAppsBefore{2020, 1, 1};
     QByteArray lang;
     QByteArray userToken;
     QNetworkCookie userCookie;
